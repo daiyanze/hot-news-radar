@@ -17,7 +17,7 @@ from __future__ import annotations
 import json
 import urllib.request
 
-USER_AGENT = "hot-news-radar/0.2 (+https://github.com/daiyanze/hot-news-radar)"
+USER_AGENT = "tripple-signals/0.2 (+https://github.com/daiyanze/tripple-signals)"
 TIMEOUT = 25
 
 

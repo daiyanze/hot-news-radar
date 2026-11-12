@@ -61,7 +61,7 @@ def handle(message: dict) -> dict | None:
         return {"jsonrpc": "2.0", "id": msg_id, "result": {
             "protocolVersion": PROTOCOL_VERSION,
             "capabilities": {"tools": {}},
-            "serverInfo": {"name": "hot-news-radar", "version": "0.2.0"}}}
+            "serverInfo": {"name": "tripple-signals", "version": "0.2.1"}}}
     if method == "ping":
         return {"jsonrpc": "2.0", "id": msg_id, "result": {}}
     if method == "tools/list":

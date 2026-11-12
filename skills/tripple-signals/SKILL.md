@@ -1,9 +1,9 @@
 ---
-name: hot-news-radar
+name: tripple-signals
 description: Run one edition (morning/evening) of the twice-daily web hot-topic radar — scan layered sources, judge signals against fixed thresholds, dedupe against the topic store, and emit the report in the fixed format.
 ---
 
-# Hot News Radar — 执行指令
+# Tripple Signals — 执行指令
 
 完整方法论在仓库根目录 `methodology.md`。本文件是可执行版：照步骤跑，不要自由发挥结构。
 

@@ -22,7 +22,7 @@ jobs:
         run: |
           if [ ! -f config.json ]; then cp config.example.json config.json; fi
       # TODO（路线图 1：抓取层）：抓取器就绪后，这里先跑 python -m radar fetch，
-      # 再由 agent 读 skills/hot-news-radar/SKILL.md 做判断与出报。
+      # 再由 agent 读 skills/tripple-signals/SKILL.md 做判断与出报。
       # 当前骨架阶段只跑到期复盘，保证流程可验证：
       - name: Review due topics (14-day check)
         run: python -m radar review

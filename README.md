@@ -1,4 +1,4 @@
-# hot-news-radar
+# tripple-signals
 
 每天两扫的全网热点雷达：早 06:00 / 晚 18:00（JST），在热点到达大众搜索之前，从源头层抓到它。
 
@@ -6,7 +6,7 @@
 
 | 层 | 文件 | 作用 |
 |---|---|---|
-| 指令 | `skills/hot-news-radar/SKILL.md` | agent 照着跑的执行步骤、判定规则、报告模板 |
+| 指令 | `skills/tripple-signals/SKILL.md` | agent 照着跑的执行步骤、判定规则、报告模板 |
 | 配置 | `config.example.json` | 信息源清单、量化门槛、时区与期次——调参只动这里 |
 | 工具 | `radar/` | 确定性工作交给代码：状态存储、去重、14 天复盘（抓取器见路线图） |
 | 状态 | `state/seen-topics.json` | 话题台账（机器版）；`seen-topics.md` 是给人看的视图 |
@@ -21,7 +21,7 @@ python -m radar review               # 列出到期该复盘的话题（14 天�
 python -m pytest -q tests            # 逻辑测试，不碰网络
 ```
 
-给 agent 用：把 `skills/hot-news-radar/` 装进你的 agent（Claude Code / Codex 等），或直接让 agent 读 SKILL.md 按步骤执行。定时运行有两种方式：
+给 agent 用：把 `skills/tripple-signals/` 装进你的 agent（Claude Code / Codex 等），或直接让 agent 读 SKILL.md 按步骤执行。定时运行有两种方式：
 
 - 本机/常驻 agent：用 agent 自己的调度（如 Muse 的 cron），早晚各一次——当前 Dai 的实际运行方式。
 - GitHub Actions：`.github/workflows/radar.yml` 已备好骨架，设仓库变量 `RADAR_ENABLED=true` 后生效（需要先补上抓取层，见路线图）。
