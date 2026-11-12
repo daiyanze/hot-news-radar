@@ -2,7 +2,7 @@
 
 每天两扫的全网热点雷达：早 06:00 / 晚 18:00（JST），在热点到达大众搜索之前，从源头层抓到它。
 
-方法论见 [methodology.md](methodology.md)（写给人看的完整版）。本仓库把它拆成 agent 能直接用的四层：
+方法论见 [methodology.md](methodology.md)（写给人看的完整版）。公开站点与订阅（RSS/Atom）的计划见 [ROADMAP.md](ROADMAP.md)。本仓库把它拆成 agent 能直接用的四层：
 
 | 层 | 文件 | 作用 |
 |---|---|---|
