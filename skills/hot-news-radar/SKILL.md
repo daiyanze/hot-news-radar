@@ -15,6 +15,7 @@ description: Run one edition (morning/evening) of the twice-daily web hot-topic 
 
 ## 步骤
 
+0. **先跑抓取层**：`python -m radar scan --edition <morning|evening>`，读它写出的 `state/candidates-<日期>-<期次>.json` 作为候选底稿；状态为 missing 的源（通常是 X、Product Hunt，以及当期失败的源）再用网页扫补齐，并在报告里如实标注哪些源是代码抓的、哪些是网页扫的。
 1. **按层扫源**（顺序不可颠倒，这是方法论的核心）：
    - L1 源头层：X（Trending + config 中账号的新名字）、GitHub（Trending + 爆发仓库）、Hacker News（首页/高分新帖）、Hugging Face（Trending 前 50 新面孔）、Product Hunt（当日新品）。
    - L2 发酵层：Reddit（config 的版块，rising/热帖；留意 “is there a tool that…” 式需求）、Google News（科技/AI 头条）。

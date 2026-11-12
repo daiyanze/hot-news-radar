@@ -26,11 +26,18 @@ python -m pytest -q tests            # 逻辑测试，不碰网络
 - 本机/常驻 agent：用 agent 自己的调度（如 Muse 的 cron），早晚各一次——当前 Dai 的实际运行方式。
 - GitHub Actions：`.github/workflows/radar.yml` 已备好骨架，设仓库变量 `RADAR_ENABLED=true` 后生效（需要先补上抓取层，见路线图）。
 
-## 路线图（骨架之后）
+## 抓取层（0.2.0 已落地）
 
-1. **抓取层**：每个源一个 fetcher（GitHub / HN 有公开 API，Reddit 走公开页/RSS，X 走搜索），输出统一结构给 agent 判断。
-2. **MCP server**：`radar/mcp_server.py` 是占位入口，抓取层就绪后把 `scan` / `report` / `review` 包成 MCP 工具，任何支持 MCP 的 agent 可调。
-3. **复盘自动化**：review 结果按源统计命中率，自动调整各源权重。
+`python -m radar scan --edition morning` 跑全部抓取器，候选写入 `state/candidates-<日期>-<期次>.json`：
+
+- 实抓：GitHub（爆发仓 Search API + Trending 页）、Hacker News（Algolia）、Hugging Face（trendingScore）、Reddit（JSON，失败自动降级 RSS——无分数）、Google News（RSS）。
+- 条件抓：Product Hunt（需 `PRODUCTHUNT_TOKEN`）、X（需 `X_BEARER_TOKEN` 且 config 里配账号）。未配置时如实报缺失，由 agent 用网页扫补这两源（当前生产方式）。
+- MCP server 已可用（`python -m radar.mcp_server`，仅标准库）：工具 `radar_scan`、`radar_review`。
+
+## 路线图
+
+1. **复盘自动化**：review 结果按源统计命中率，自动调整各源权重。
+2. **GitHub Actions 实跑**：workflow 文件补齐后，把 scan 接进定时任务（当前雷达由 agent 侧 cron 驱动）。
 
 ## 边界
 

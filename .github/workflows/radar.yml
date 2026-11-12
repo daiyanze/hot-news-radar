@@ -1,0 +1,28 @@
+name: radar
+
+# 06:00 JST = 21:00 UTC (前一日)；18:00 JST = 09:00 UTC
+on:
+  schedule:
+    - cron: "0 21 * * *"
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+jobs:
+  scan:
+    # 在仓库 Settings → Secrets and variables → Actions → Variables 里
+    # 把 RADAR_ENABLED 设为 true 才真正运行（学 new-term-radar 的开关做法）。
+    if: vars.RADAR_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Copy example config if none provided
+        run: |
+          if [ ! -f config.json ]; then cp config.example.json config.json; fi
+      # TODO（路线图 1：抓取层）：抓取器就绪后，这里先跑 python -m radar fetch，
+      # 再由 agent 读 skills/hot-news-radar/SKILL.md 做判断与出报。
+      # 当前骨架阶段只跑到期复盘，保证流程可验证：
+      - name: Review due topics (14-day check)
+        run: python -m radar review
