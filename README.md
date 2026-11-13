@@ -28,12 +28,14 @@ python -m pytest -q tests            # 逻辑测试，不碰网络
 - 本机/常驻 agent：用 agent 自己的调度（如 Muse 的 cron），早晚各一次——当前 Dai 的实际运行方式。
 - GitHub Actions：`.github/workflows/radar.yml` 已备好骨架，设仓库变量 `RADAR_ENABLED=true` 后生效（需要先补上抓取层，见路线图）。
 
-## 抓取层（0.2.0 已落地）
+## 抓取层（0.3.0 扩源）
 
-`python -m radar scan --edition morning` 跑全部抓取器，候选写入 `state/candidates-<日期>-<期次>.json`：
+`python -m radar scan --edition morning` 跑全部抓取器，候选写入 `state/candidates-<日期>-<期次>.json`。共 19 个源，全部免费、免 key（唯一的例外是 X）：
 
-- 实抓：GitHub（爆发仓 Search API + Trending 页）、Hacker News（Algolia）、Hugging Face（trendingScore）、Reddit（JSON，失败自动降级 RSS——无分数）、Google News（RSS）。
-- 条件抓：Product Hunt（需 `PRODUCTHUNT_TOKEN`）、X（需 `X_BEARER_TOKEN` 且 config 里配账号）。未配置时如实报缺失，由 agent 用网页扫补这两源（当前生产方式）。
+- L1 源头层（11）：官方博客 RSS 组（OpenAI/DeepMind/Google Research/HF/Mistral/NVIDIA/AWS/GitHub Blog/BAIR，仿 [AIHOT](https://github.com/KKKKhazix/AIHOT) 的 T1 分级）、GitHub（爆发仓 Search API + Trending 页）、Hacker News（Algolia）、Show HN、Hugging Face models、HF Spaces、OpenRouter（最新上架模型）、Civitai（最新社区模型）、arXiv（最新论文）、Product Hunt（公开 Atom feed；有 `PRODUCTHUNT_TOKEN` 时走 GraphQL 取票数）、X（需 `X_BEARER_TOKEN` 且 config 里配账号，未配置时如实报缺失、由 agent 网页扫补位）。
+- L2 发酵层（8）：Reddit（JSON，失败自动降级 RSS——无分数）、科技媒体 RSS 组（TechCrunch/The Verge/Ars Technica/MIT TR/The Decoder/Simon Willison/Import AI/Latent Space，AIHOT 的 T2 分级）、DEV、Lobsters、Mastodon 趋势、目录站 sitemap 组（Futurepedia/Toolify/dang.ai，借鉴 [new-term-radar](https://github.com/zhuyansen/new-term-radar) 的 sitemap 信号）、App Store 美区双榜（营销工具接口不稳时自动降级旧版 iTunes feed）、Google News（RSS）。
+- **组源只算一个源**：RSS 组和 sitemap 组内部再多家，跨源共振时整组计 1——通稿被十家转述、工具被五个目录抄录，都不算多源共振。
+- 2026-11-13 实测：19 个源 18 个实时出数（约 600 条候选），仅 X 缺失（无 token）。
 - MCP server 已可用（`python -m radar.mcp_server`，仅标准库）：工具 `radar_scan`、`radar_review`。
 
 ## 路线图

@@ -2,8 +2,15 @@
 
 from __future__ import annotations
 
-from . import github, googlenews, hackernews, huggingface, producthunt, reddit, x
+from . import (appstore, arxiv, civitai, devto, github, googlenews,
+               hackernews, hfspaces, huggingface, lobsters, mastodon, media,
+               official, openrouter, producthunt, reddit, showhn, sitemaps, x)
 
-FETCHERS = [x, github, hackernews, huggingface, producthunt, reddit, googlenews]
+# L1 source layer first, then L2 fermentation. X stays first: when a
+# token is configured it is the earliest signal of all.
+FETCHERS = [x, official, github, hackernews, showhn, huggingface, hfspaces,
+            openrouter, civitai, arxiv, producthunt,
+            reddit, media, devto, lobsters, mastodon, sitemaps, appstore,
+            googlenews]
 
 __all__ = ["FETCHERS"]

@@ -17,7 +17,33 @@ from .fetchers import FETCHERS
 
 STOPWORDS = {"the", "a", "an", "of", "for", "to", "in", "on", "with", "and",
              "launches", "launch", "releases", "release", "announces", "new",
-             "ai", "llm", "model", "models", "using", "show", "hn"}
+             "ai", "llm", "model", "models", "using", "show", "hn",
+             # function words and generic verbs/nouns that headline
+             # titles share without naming the same thing — with more
+             # sources feeding the grouper (0.3.0), these produced
+             # hundreds of junk "resonance" groups
+             "how", "what", "why", "when", "where", "which", "who", "whom",
+             "this", "that", "these", "those", "there", "here", "your",
+             "you", "are", "was", "were", "has", "have", "had", "its",
+             "it", "can", "could", "will", "would", "should", "may",
+             "might", "must", "from", "into", "over", "under", "after",
+             "before", "about", "than", "then", "now", "just", "more",
+             "most", "other", "others", "some", "any", "all", "each",
+             "get", "gets", "got", "make", "makes", "made", "build",
+             "builds", "built", "building", "use", "uses", "used",
+             "way", "ways", "thing", "things", "world", "today", "day",
+             "week", "year", "years", "time", "people", "work", "works",
+             "first", "one", "two", "three", "out", "off", "per",
+             "via", "vs", "app", "apps", "tool", "tools", "free",
+             "best", "top", "big", "yet", "still", "even", "also",
+             "not", "no", "yes", "but", "if", "so", "as", "at", "by"}
+
+# A token shared by more items than this is a theme, not a name.
+MAX_TOKEN_ITEMS = 12
+
+# The candidate file is read by an agent; keep only the strongest
+# groups (most sources first) instead of hundreds of weak ones.
+MAX_GROUPS = 60
 
 
 def tokens(name: str) -> set[str]:
@@ -39,7 +65,7 @@ def resonance_groups(results: list[dict]) -> list[dict]:
     groups, seen = [], set()
     for tok, items in by_token.items():
         sources = {i["source"] for i in items}
-        if len(sources) < 2:
+        if len(sources) < 2 or len(items) > MAX_TOKEN_ITEMS:
             continue
         key = tuple(sorted(i["name"] for i in items))
         if key in seen:
@@ -48,7 +74,8 @@ def resonance_groups(results: list[dict]) -> list[dict]:
         groups.append({"token": tok, "sources": sorted(sources),
                        "items": [{"source": i["source"], "name": i["name"],
                                   "url": i["url"]} for i in items]})
-    return groups
+    groups.sort(key=lambda g: (-len(g["sources"]), -len(g["items"]), g["token"]))
+    return groups[:MAX_GROUPS]
 
 
 def load_config(path: str | None = None) -> dict:

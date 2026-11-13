@@ -4,7 +4,10 @@ feeds a small recorded-shaped fixture into a pure parse function."""
 from datetime import datetime, timezone
 
 from radar import scan as scan_mod
-from radar.fetchers import github, googlenews, hackernews, huggingface, reddit
+from radar.fetchers import (appstore, arxiv, civitai, common, devto, github,
+                            googlenews, hackernews, hfspaces, huggingface,
+                            lobsters, mastodon, openrouter, producthunt, reddit,
+                            showhn, sitemaps)
 
 NOW = datetime(2026, 11, 12, tzinfo=timezone.utc)
 
@@ -84,6 +87,129 @@ def test_googlenews_parse():
     items = googlenews.parse(xml)
     assert items[0]["name"] == "Story - Outlet"
     assert items[0]["metrics"]["outlet"] == "Outlet"
+
+
+def test_parse_feed_rss_and_atom():
+    rss = ('<rss><channel><item><title>Launch</title>'
+           '<link>https://example.com/a</link><pubDate>Thu, 13 Nov 2026</pubDate>'
+           '</item></channel></rss>')
+    items = common.parse_feed(rss, "official_blogs", "Example")
+    assert items[0]["name"] == "Launch" and items[0]["metrics"]["outlet"] == "Example"
+    atom = ('<feed xmlns="http://www.w3.org/2005/Atom"><entry><title>Post</title>'
+            '<link rel="alternate" href="https://example.com/b"/>'
+            '<published>2026-11-13T00:00:00Z</published></entry></feed>')
+    items = common.parse_feed(atom, "tech_media", "Atom Blog")
+    assert items[0]["url"] == "https://example.com/b"
+
+
+def test_producthunt_feed_parse():
+    atom = ('<feed xmlns="http://www.w3.org/2005/Atom"><entry><title>NewTool</title>'
+            '<link href="https://www.producthunt.com/posts/newtool"/></entry></feed>')
+    items = producthunt.parse_feed(atom)
+    assert items[0]["name"] == "NewTool"
+
+
+def test_arxiv_parse():
+    xml = ('<feed xmlns="http://www.w3.org/2005/Atom" '
+           'xmlns:arxiv="http://arxiv.org/schemas/atom"><entry>'
+           '<id>http://arxiv.org/abs/2611.00001v1</id>'
+           '<title>A  New\n Method</title><published>2026-11-12T00:00:00Z</published>'
+           '<summary>We propose things.</summary>'
+           '<arxiv:primary_category term="cs.CL"/>'
+           '<author><name>A</name></author></entry></feed>')
+    items = arxiv.parse(xml)
+    assert items[0]["name"] == "A New Method"
+    assert items[0]["metrics"]["category"] == "cs.CL"
+
+
+def test_openrouter_newest_first_and_new_flag():
+    import time
+    recent = int((NOW.timestamp())) - 2 * 86400
+    old = int((NOW.timestamp())) - 200 * 86400
+    payload = {"data": [
+        {"id": "acme/old", "name": "Old", "created": old},
+        {"id": "acme/new", "name": "New", "created": recent, "context_length": 128000}]}
+    items = openrouter.parse(payload, NOW)
+    assert items[0]["metrics"]["model_id"] == "acme/new"
+    assert items[0]["metrics"]["is_new"] is True
+    assert items[1]["metrics"]["is_new"] is False
+
+
+def test_hfspaces_new_face():
+    payload = [{"id": "acme/demo", "likes": 5, "trendingScore": 10, "sdk": "gradio",
+                "createdAt": "2026-11-10T00:00:00.000Z"}]
+    items = hfspaces.parse(payload, NOW)
+    assert items[0]["url"] == "https://huggingface.co/spaces/acme/demo"
+    assert items[0]["metrics"]["new_face"] is True
+
+
+def test_showhn_parse():
+    payload = {"hits": [{"title": "Show HN: Thing", "url": None, "points": 12,
+                         "num_comments": 3, "objectID": "99"}]}
+    items = showhn.parse(payload)
+    assert items[0]["url"] == "https://news.ycombinator.com/item?id=99"
+
+
+def test_devto_and_lobsters_parse():
+    dev = devto.parse([{"title": "Post", "url": "https://dev.to/x",
+                        "public_reactions_count": 40, "comments_count": 5,
+                        "reading_time_minutes": 3, "description": "d"}])
+    assert dev[0]["metrics"]["reactions"] == 40
+    lob = lobsters.parse([{"title": "Story", "url": "https://example.com",
+                           "comments_url": "https://lobste.rs/s/abc", "score": 30,
+                           "comment_count": 9, "tags": ["ai"]}])
+    assert lob[0]["metrics"]["score"] == 30
+
+
+def test_mastodon_parse():
+    links = mastodon.parse_links([{"title": "Big Story", "url": "https://x.example",
+                                   "provider_name": "Outlet", "description": "d",
+                                   "history": [{"accounts": "42", "uses": "50"}]}])
+    assert links[0]["metrics"]["accounts_today"] == 42
+    tags = mastodon.parse_tags([{"name": "ai", "url": "https://m/tags/ai",
+                                 "history": [{"accounts": "7"}]}])
+    assert tags[0]["name"] == "#ai"
+
+
+def test_civitai_parse():
+    payload = {"items": [{"id": 7, "name": "Model X", "type": "Checkpoint",
+                          "stats": {"downloadCount": 100, "thumbsUpCount": 9},
+                          "modelVersions": [{"baseModel": "Flux"}]}]}
+    items = civitai.parse(payload)
+    assert items[0]["url"] == "https://civitai.com/models/7"
+    assert items[0]["metrics"]["base_models"] == ["Flux"]
+
+
+def test_appstore_parse_ranks():
+    payload = {"feed": {"results": [
+        {"name": "AppA", "url": "https://apps.apple.com/a", "artistName": "A Inc",
+         "genres": [{"name": "Productivity"}]},
+        {"name": "AppB", "url": "https://apps.apple.com/b", "artistName": "B Inc",
+         "genres": []}]}}
+    items = appstore.parse(payload, "top-grossing")
+    assert items[0]["metrics"]["rank"] == 1 and items[1]["metrics"]["rank"] == 2
+
+
+def test_sitemaps_urlset_filters_and_sorts():
+    xml = ('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+           '<url><loc>https://www.futurepedia.io/tool/new-thing</loc>'
+           '<lastmod>2026-11-11T00:00:00.000Z</lastmod></url>'
+           '<url><loc>https://www.futurepedia.io/tool/old-thing</loc>'
+           '<lastmod>2026-01-01T00:00:00.000Z</lastmod></url>'
+           '<url><loc>https://www.futurepedia.io/ai-tools</loc></url></urlset>')
+    site = {"name": "futurepedia", "pattern": r"/tool/([^/]+)$", "max_age_days": 7}
+    items = sitemaps.parse_urlset(xml, site, NOW)
+    assert len(items) == 1 and items[0]["name"] == "new thing"
+
+
+def test_sitemaps_index_picks_highest_shard():
+    xml = ('<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+           '<sitemap><loc>https://www.toolify.ai/sitemap_tools_2.xml</loc></sitemap>'
+           '<sitemap><loc>https://www.toolify.ai/sitemap_tools_10.xml</loc></sitemap>'
+           '<sitemap><loc>https://www.toolify.ai/sitemap_index_1.xml</loc></sitemap>'
+           '</sitemapindex>')
+    shards = sitemaps.parse_index(xml, r"sitemap_tools_(\d+)\.xml$")
+    assert shards[-1] == "https://www.toolify.ai/sitemap_tools_10.xml"
 
 
 def test_resonance_needs_two_sources():

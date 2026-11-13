@@ -17,19 +17,33 @@
 ## 二、信息源分层（每扫必查）
 
 ### L1 源头层（最先出现，权重最高）
-- **X**：Trending + AI/科技关键账号动态（新模型、新产品、新词第一次被说出来的地方）
+- **X**：Trending + AI/科技关键账号动态（新模型、新产品、新词第一次被说出来的地方）。无免费官方 API，需 token，未配置时由 agent 网页扫补位
+- **官方博客**（RSS 组）：OpenAI、DeepMind、Google Research、Hugging Face、Mistral、NVIDIA、AWS ML、GitHub Blog、BAIR 的一手公告（名单仿 AIHOT 的 T1 分级，在 config 里可换成自己行业的源）
 - **GitHub**：Trending + 爆发仓库（判据见第三节）
 - **Hacker News**：首页 + new 区高分帖
-- **Hugging Face**：Trending models / Spaces 前 50 里的新面孔
-- **Product Hunt**：当日新品
+- **Show HN**：独立产品的发布帖，第一现场（与 HN 首页分开统计）
+- **Hugging Face**：Trending models 前 50 里的新面孔
+- **HF Spaces**：Trending Spaces 前 50（人们真正上手试的 demo，new-term-radar 同样把 Spaces 单列）
+- **OpenRouter**：最新上架模型（按创建时间排序，14 天内标新）——模型上架往往早于官宣热度
+- **Civitai**：最新社区模型（仅 SFW）；某基座突然被大量微调 = 扩散开始
+- **arXiv**：cs.AI / cs.CL / cs.LG 最新提交——新方法、新模型名的最早出处之一
+- **Product Hunt**：当日新品（无 token 时走公开 Atom feed，无票数）
 
 ### L2 发酵层（确认热度在扩散）
 - **Reddit**：r/all rising + 相关版块（r/artificial、r/LocalLLaMA、r/SideProject、r/technology 等）的热帖；特别留意 “is there a tool that…” 这类**说出口的需求**
+- **科技媒体**（RSS 组）：TechCrunch、The Verge、Ars Technica、MIT Technology Review、The Decoder + 独立作者（Simon Willison、Import AI、Latent Space）（仿 AIHOT 的 T2 分级）
+- **DEV (dev.to)**：开发者社区当日热文
+- **Lobsters**：hottest 列表，与 HN 互为交叉验证
+- **Mastodon**：大实例（mastodon.social）的 trending links/tags，当日独立账号数就是讨论量——X 没有免费 API 时的社交信号替代
+- **目录站 sitemap**：Futurepedia、Toolify、dang.ai 等 AI 工具目录的新工具页（借鉴 new-term-radar 的 sitemap 信号：目录站开始给某个新工具建页 = 进入扩散层）
+- **App Store 榜单**：美区畅销榜 + 免费榜——AI 应用冲榜是「有人付钱」的钱信号
 - **Google News**：科技/AI 头条（同一事件被多家媒体报道 = 已进入扩散层）
+
+> **组源规则（防假共振）**：RSS 组（官方博客、科技媒体）和 sitemap 组内部有再多家，整组只算 **1 个源**。一家公司的通稿被十家媒体转述、一个工具被五个目录站抄录，都不是多源共振——共振必须来自真正独立的源。
 
 ### L3 验证层（只做核对，不作为发现来源）
 - **Google Trends**：只用来核对苗头词的曲线形状（是不是真在涨、哪天开始涨），不拿它找热点 —— 它是最滞后的
-- 补充源（有余力时）：YouTube 热门、抖音/TikTok 热搜词、Show HN、OpenRouter 新模型
+- 补充源（有余力时）：YouTube 热门、抖音/TikTok 热搜词
 
 ## 三、信号判定（什么算热点）
 
@@ -95,6 +109,7 @@
 
 ## 八、成本与边界
 
-- 全部用公开页面/搜索完成，不需要付费 API key（repo 的 AIsa 等付费源暂不引入；如果以后发现 X 信号不够，再议）。
+- 全部用公开页面/搜索完成，不需要付费 API key（new-term-radar 的 AIsa 等付费源、AIHOT 的 SocialData（X）/ 大家啦（公众号）暂不引入；X 仍由 agent 网页扫补位，如果以后发现 X 信号不够，再议）。
+- 0.3.0 起抓取层共 19 个源：18 个免 key 实抓（见第二节），只有 X 需要 token。试过但没接的：Stack Exchange API（本机出口 IP 被限流 11 小时，信号再好也不稳定）、Bluesky 公开搜索（403）、Microsoft Research RSS（403）——都等条件变化再议，不硬凑。
 - 只做公开信息的读取和汇总，不发帖、不互动。
 - 报告发回主聊天；台账和方法论都在 `~/workspace/hot-news-radar/` 下，可随时改。
