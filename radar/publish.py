@@ -35,7 +35,7 @@ OUT_DIR = ROOT / "site"
 ASSETS_DIR = ROOT / "assets"
 # Brand files copied verbatim into the generated site root.
 BRAND_FILES = ("favicon.svg", "favicon-32.png", "apple-touch-icon.png", "banner.png")
-DEFAULT_BASE_URL = "https://daiyanze.github.io/tripple-signals"
+DEFAULT_BASE_URL = "https://daiyanze.com/tripple-signals"
 
 SLOT_ORDER = {"pilot": 0, "morning": 1, "evening": 2}
 LEVEL_LABEL = {"must": "🔥 必看", "watch": "👀 关注", "seed": "🌱 苗头"}
