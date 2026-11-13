@@ -49,6 +49,14 @@ filters:
   # Bluesky 等有；没有时间戳的候选不拦）。null = 不过滤。
   max_age_hours: null
 
+vocab:
+  # 新词词汇表（0.5.0）：实体型源（GitHub / HF / OpenRouter / Civitai /
+  # Product Hunt / 目录站 / App Store）的名字若在 window_days 天内没在
+  # 候选流里出现过，打上 "novel": true。第一次运行只建基线、不打标。
+  # 状态文件 state/vocab.json；enabled: false 可关。
+  window_days: 60
+  state_file: state/vocab.json
+
 grading:
   levels: [必看, 关注, 苗头]
   min_sources_for_hotspot: 2
@@ -177,6 +185,9 @@ sources:
   sitemaps:
     layer: 2
     rule: AI 工具目录站 sitemap 里的新工具页；整组只算一个源（目录站会互相抄）
+    # 0.5.0 起改快照 diff：只报上次快照里没有的 URL，同一工具不重复报；
+    # 每个目录第一次运行只建基线、不出条目。状态文件可改：
+    state_file: state/sitemap-seen.json
     sites:
       - name: futurepedia
         url: "https://www.futurepedia.io/sitemap_tools.xml"
@@ -186,11 +197,47 @@ sources:
         url: "https://www.toolify.ai/sitemap.xml"
         shard_pattern: 'sitemap_tools_(\d+)\.xml$'
         shards_to_read: 1
-        pattern: '/tool/([^/]+)/?$'
+        pattern: 'toolify\.ai/tool/([^/]+)/?$'
       - name: dang.ai
         url: "https://dang.ai/sitemap.xml"
         pattern: 'dang\.ai/([^/]+)$'
         skip: '^(about|advertise|blog|pricing|login|signup)$'
+      - name: glama
+        url: "https://glama.ai/sitemap.xml"
+        shard_patterns: ['mcp-servers/(\d+)\.xml$', 'mcp-remote-servers/(\d+)\.xml$']
+        shards_to_read: 2
+        pattern: '/mcp/(?:servers|connectors)/(.+)$'
+      - name: mcp.so
+        url: "https://mcp.so/sitemap.xml"
+        shard_pattern: 'section=servers&page=(\d+)$'
+        shards_to_read: 2
+        pattern: '/servers/([^/]+)$'
+      - name: lobehub-mcp
+        url: "https://lobehub.com/sitemap/mcp.xml"
+        pattern: 'lobehub\.com/mcp/([^/]+)$'
+      - name: lobehub-skills
+        url: "https://lobehub.com/sitemap/skills.xml"
+        pattern: 'lobehub\.com/skills/([^/]+)$'
+      - name: aixploria
+        url: "https://www.aixploria.com/sitemap.xml"
+        shard_pattern: 'sitemap-posttype-post\.(\d{6})\.xml$'
+        shards_to_read: 1
+        pattern: 'aixploria\.com/([^/]+)/$'
+      - name: opentools
+        url: "https://opentools.ai/sitemap.xml"
+        shard_pattern: '/tools-sitemap\.xml$'
+        shards_to_read: 1
+        pattern: '/tools/([^/]+)$'
+      - name: clipfly
+        url: "https://www.clipfly.ai/sitemaps/en.xml"
+        pattern: 'clipfly\.ai/(?!pt/|es/|fr/|de/|ja/|ko/|zh/)[a-z0-9-]+/([a-z0-9-]+)/$'
+      - name: aitoptools
+        url: "https://aitoptools.com/sitemap.xml"
+        pattern: '/tool/([^/]+)/?$'
+      - name: ai-bot.cn
+        url: "https://ai-bot.cn/sitemap.xml"
+        pattern: 'ai-bot\.cn/([^/]+)/$'
+        skip: '^(about|contact|privacy|terms|submit|sitemap|vipcheap-banner)'
   app_store:
     layer: 2
     country: us

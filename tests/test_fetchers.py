@@ -203,6 +203,17 @@ def test_sitemaps_urlset_filters_and_sorts():
     assert len(items) == 1 and items[0]["name"] == "new thing"
 
 
+def test_sitemaps_urlset_naive_lastmod_does_not_crash_sort():
+    xml = ('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+           '<url><loc>https://aitoptools.com/tool/naive-date</loc>'
+           '<lastmod>2026-11-11</lastmod></url>'
+           '<url><loc>https://aitoptools.com/tool/aware-date</loc>'
+           '<lastmod>2026-11-10T00:00:00.000Z</lastmod></url></urlset>')
+    site = {"name": "aitoptools", "pattern": r"/tool/([^/]+)/?$"}
+    items = sitemaps.parse_urlset(xml, site, NOW)
+    assert [i["name"] for i in items] == ["naive date", "aware date"]
+
+
 def test_sitemaps_index_picks_highest_shard():
     xml = ('<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
            '<sitemap><loc>https://www.toolify.ai/sitemap_tools_2.xml</loc></sitemap>'
@@ -211,6 +222,39 @@ def test_sitemaps_index_picks_highest_shard():
            '</sitemapindex>')
     shards = sitemaps.parse_index(xml, r"sitemap_tools_(\d+)\.xml$")
     assert shards[-1] == "https://www.toolify.ai/sitemap_tools_10.xml"
+
+
+def test_sitemaps_index_keeps_document_order_without_numbers():
+    xml = ('<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+           '<sitemap><loc>https://opentools.ai/pages-sitemap.xml</loc></sitemap>'
+           '<sitemap><loc>https://opentools.ai/tools-sitemap.xml</loc></sitemap>'
+           '</sitemapindex>')
+    shards = sitemaps.parse_index(xml, r"/tools-sitemap\.xml$")
+    assert shards == ["https://opentools.ai/tools-sitemap.xml"]
+
+
+def _sm_item(url):
+    return {"source": "sitemaps", "name": url.rsplit("/", 1)[-1],
+            "url": url, "metrics": {}, "detail": ""}
+
+
+def test_sitemaps_diff_baseline_then_fresh():
+    items = [_sm_item("https://x.io/tool/a"), _sm_item("https://x.io/tool/b")]
+    fresh, seen, baseline = sitemaps.diff_items(items, {}, NOW)
+    assert baseline and fresh == [] and len(seen) == 2
+    items2 = items + [_sm_item("https://x.io/tool/c")]
+    fresh, seen, baseline = sitemaps.diff_items(items2, seen, NOW)
+    assert not baseline and [i["url"] for i in fresh] == ["https://x.io/tool/c"]
+    fresh, seen, _ = sitemaps.diff_items(items2, seen, NOW)
+    assert fresh == []
+
+
+def test_sitemaps_diff_prunes_vanished_old_urls():
+    seen = {"https://x.io/tool/gone": "2026-01-01",
+            "https://x.io/tool/recent": "2026-11-01"}
+    fresh, seen, _ = sitemaps.diff_items([], seen, NOW)
+    assert "https://x.io/tool/gone" not in seen
+    assert "https://x.io/tool/recent" in seen
 
 
 def test_dailypapers_parse():

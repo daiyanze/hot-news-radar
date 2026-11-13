@@ -66,7 +66,7 @@ python -m pytest -q tests            # 逻辑测试，不碰网络
 | DEV (dev.to) | L2 发酵 | 开发者社区当日热文 | 免费 |
 | Lobsters | L2 发酵 | hottest 列表，与 HN 互为交叉验证 | 免费 |
 | Mastodon | L2 发酵 | 大实例（mastodon.social）的 trending links/tags，附当日独立账号数 | 免费 |
-| 目录站 sitemap 组（Futurepedia、Toolify、dang.ai） | L2 发酵 | AI 工具目录的新工具页（借鉴 [new-term-radar](https://github.com/zhuyansen/new-term-radar) 的 sitemap 信号） | 免费 |
+| 目录站 sitemap 组（Futurepedia、Toolify、dang.ai、Glama、mcp.so、LobeHub MCP、LobeHub Skills、Aixploria、OpenTools、Clipfly、aitoptools、ai-bot.cn，共 12 家） | L2 发酵 | AI 工具目录的新工具页（借鉴 [new-term-radar](https://github.com/zhuyansen/new-term-radar) 的 sitemap 信号）；0.5.0 起改快照 diff，只报上次没见过的新页，同一工具不重复报 | 免费 |
 | App Store | L2 发酵 | 美区畅销榜 + 免费榜（接口不稳时自动降级旧版 iTunes feed） | 免费 |
 | Wikipedia 热读榜 | L2 发酵 | 英文维基昨日浏览 Top（大众注意力 + 社会观察） | 免费 |
 | Google News | L2 发酵 | 科技/AI 头条（RSS） | 免费 |
@@ -90,6 +90,7 @@ python -m pytest -q tests            # 逻辑测试，不碰网络
 | 每源开关 | `sources.<源>.enabled: false` | 关掉某个源；报告里单列「已停用」，不算缺失 |
 | 每源上限 | `sources.<源>.max_items: 20` | 抓完后统一截断（区别于各源自己的抓取参数 `limit`） |
 | 新鲜度窗口 | `filters.max_age_hours: 72` | 只对带时间戳的候选生效，太旧的丢弃；无时间戳的不拦 |
+| 新词词汇表 | `vocab.window_days: 60`（0.5.0） | 实体型源（GitHub / HF / OpenRouter / Civitai / Product Hunt / 目录站 / App Store）的名字在窗口内没出现过 → 打 `novel` 标，是优先级最高的苗头信号；第一次运行只建基线 |
 
 ## 路线图
 

@@ -1,10 +1,13 @@
 """Tests for the 0.4.0 user controls and the YAML config path."""
 
+import os
+import tempfile
 import types
 from datetime import datetime, timedelta, timezone
 
 from radar import config as config_mod
 from radar import scan as scan_mod
+from radar import vocab as vocab_mod
 from radar import yamlmini
 from radar.__main__ import auto_edition
 
@@ -117,3 +120,36 @@ def test_run_scan_disabled_and_max_items(tmp_out="state"):
 def test_auto_edition():
     assert auto_edition(datetime(2026, 11, 13, 6, 0)) == "morning"
     assert auto_edition(datetime(2026, 11, 13, 18, 0)) == "evening"
+
+
+def _gh(name):
+    return {"source": "github", "name": name, "url": "https://example.com",
+            "metrics": {}, "detail": ""}
+
+
+def test_vocab_baseline_then_novel_then_window_expiry():
+    path = os.path.join(tempfile.mkdtemp(), "vocab.json")
+    cfg = {"vocab": {"window_days": 60, "state_file": path}}
+    results = [{"source": "github", "items": [_gh("a/b"), _gh("c/d")]}]
+    stats = vocab_mod.apply_vocab(results, cfg, NOW)
+    assert stats["baseline"] and stats["novel"] == 0
+    assert not any("novel" in i for i in results[0]["items"])
+    results = [{"source": "github", "items": [_gh("a/b"), _gh("e/f")]}]
+    stats = vocab_mod.apply_vocab(results, cfg, NOW)
+    assert not stats["baseline"] and stats["novel"] == 1
+    assert results[0]["items"][1].get("novel") is True
+    later = NOW + timedelta(days=61)
+    results = [{"source": "github", "items": [_gh("a/b")]}]
+    stats = vocab_mod.apply_vocab(results, cfg, later)
+    assert stats["novel"] == 1  # fell out of the 60-day window
+
+
+def test_vocab_ignores_text_sources_and_disabled():
+    path = os.path.join(tempfile.mkdtemp(), "vocab.json")
+    cfg = {"vocab": {"state_file": path}}
+    vocab_mod.apply_vocab([{"source": "github", "items": [_gh("a/b")]}], cfg, NOW)
+    results = [{"source": "hackernews", "items": [_item("Some Headline")]}]
+    stats = vocab_mod.apply_vocab(results, cfg, NOW)
+    assert stats["novel"] == 0 and "novel" not in results[0]["items"][0]
+    off = vocab_mod.apply_vocab(results, {"vocab": {"enabled": False}}, NOW)
+    assert off == {"enabled": False}

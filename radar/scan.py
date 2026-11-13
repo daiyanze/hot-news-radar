@@ -16,6 +16,7 @@ from email.utils import parsedate_to_datetime
 
 from .config import load_config  # re-exported for mcp_server / __main__
 from .fetchers import FETCHERS
+from .vocab import apply_vocab
 
 __all__ = ["load_config", "run_scan", "summary_lines", "resonance_groups",
            "apply_controls", "topic_weights", "item_time", "tokens"]
@@ -198,6 +199,7 @@ def run_scan(edition: str, config: dict, now: datetime | None = None,
             result["note"] = f"{result['note']}; {note}" if result["note"] else note
         results.append(result)
     stats, alerts = apply_controls(results, config, now)
+    vocab_stats = apply_vocab(results, config, now)
     report = {
         "edition": edition,
         "scanned_at": now.isoformat(),
@@ -205,6 +207,7 @@ def run_scan(edition: str, config: dict, now: datetime | None = None,
         "resonance": resonance_groups(results),
         "keyword_alerts": alerts,
         "controls": stats,
+        "vocab": vocab_stats,
         "missing": [r["source"] for r in results if r["status"] == "missing"],
         "disabled": [r["source"] for r in results if r["status"] == "disabled"],
     }
@@ -231,4 +234,12 @@ def summary_lines(report: dict) -> list[str]:
                      f"alert={controls.get('alert_tagged', 0)}")
     if report.get("keyword_alerts"):
         lines.append(f"  keyword alerts: {len(report['keyword_alerts'])}")
+    vocab = report.get("vocab") or {}
+    if vocab.get("enabled") is not False and vocab:
+        if vocab.get("baseline"):
+            lines.append(f"  vocab: baseline built ({vocab.get('size', 0)} names); "
+                         "novelty flags start with the next scan")
+        else:
+            lines.append(f"  vocab: {vocab.get('novel', 0)} novel names "
+                         f"(vocab size {vocab.get('size', 0)})")
     return lines

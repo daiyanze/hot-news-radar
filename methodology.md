@@ -37,7 +37,7 @@
 - **DEV (dev.to)**：开发者社区当日热文
 - **Lobsters**：hottest 列表，与 HN 互为交叉验证
 - **Mastodon**：大实例（mastodon.social）的 trending links/tags，当日独立账号数就是讨论量——X 没有免费 API 时的社交信号替代
-- **目录站 sitemap**：Futurepedia、Toolify、dang.ai 等 AI 工具目录的新工具页（借鉴 new-term-radar 的 sitemap 信号：目录站开始给某个新工具建页 = 进入扩散层）
+- **目录站 sitemap**：Futurepedia、Toolify、dang.ai、Glama、mcp.so、LobeHub（MCP / Skills）、Aixploria、OpenTools、Clipfly、aitoptools、ai-bot.cn 共 12 家 AI 工具目录的新工具页（借鉴 new-term-radar 的 sitemap 信号：目录站开始给某个新工具建页 = 进入扩散层）。0.5.0 起判定方式改**快照 diff**：每个目录见过的 URL 全部留档（`state/sitemap-seen.json`），只报上次快照里没有的 URL——同一个工具只报第一次，时间窗口的重复播报归零；每个目录第一次运行只建基线、不出条目。
 - **App Store 榜单**：美区畅销榜 + 免费榜——AI 应用冲榜是「有人付钱」的钱信号
 - **Wikipedia 热读榜**：英文维基昨日浏览 Top——大众层传感器，也是社会观察维度的主要供稿（只确认大众注意力，不产生科技信号）
 - **Google News**：科技/AI 头条（同一事件被多家媒体报道 = 已进入扩散层）
@@ -114,6 +114,7 @@
 
 - 全部用公开页面/搜索完成，不需要付费 API key（new-term-radar 的 AIsa 等付费源、AIHOT 的 SocialData（X）/ 大家啦（公众号）暂不引入；X 仍由 agent 网页扫补位，如果以后发现 X 信号不够，再议）。
 - 0.3.0 起抓取层共 19 个源，0.3.1 增至 22 个（新增 Daily Papers、Bluesky、Wikipedia 三个英文源；按 Dai 的选择，中文源 Bilibili/V2EX/少数派本轮不接）：21 个免 key 实抓（见第二节），只有 X 需要 token。试过但没接的：Stack Exchange API（本机出口 IP 被限流 11 小时，信号再好也不稳定）、Bluesky 公开搜索（403）、Microsoft Research RSS（403）——都等条件变化再议，不硬凑。
+- 0.5.0 不增源数：目录站组 3 → 12 家并改快照 diff（见第二节）；新增新词词汇表（见第九节）。
 - 只做公开信息的读取和汇总，不发帖、不互动。
 - 报告发回主聊天；台账和方法论都在 `~/workspace/hot-news-radar/` 下，可随时改。
 
@@ -125,6 +126,7 @@
 - **主题权重** `topics`：相关性从二值变权重（1–5），换行业主要改这一节；旧的平铺列表写法继续兼容（权重按 1）。
 - **每源开关与上限**：`sources.<源>.enabled: false` 关源（与「缺失」严格区分，不补扫、不报缺失）；`sources.<源>.max_items` 抓后统一截断（与各源自己的抓取参数 `limit` 不同）。
 - **新鲜度窗口** `filters.max_age_hours`：只过滤带可解析时间戳的候选（arXiv、RSS 组、Bluesky、Google News 等有时间戳；没有时间戳的源不因缺字段被误杀）。
+- **新词词汇表** `vocab`（0.5.0）：借鉴 new-term-radar 的核心机制——维护一份滚动词汇表（`state/vocab.json`），实体型源（GitHub / HF / HF Spaces / OpenRouter / Civitai / Product Hunt / 目录站 / App Store）的名字若在 `window_days`（默认 60）内没在候选流里出现过，候选打上 `"novel": true`。第一次运行只建基线不打标，所以 novel 的含义是「自你开始看以来第一次出现」，不是「全网首次」。文本型源（标题即句子）不进词汇表，其新颖性仍归 agent 判断。novel 是优先级最高的苗头信号：单源 + novel 值得 agent 优先核查。
 
 原则不变：不填 = 默认行为；选项只做过滤与打标，不替 agent 做语义判断。
 

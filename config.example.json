@@ -1,21 +1,40 @@
 {
   "$comment": "Generated from config.example.yaml — edit the YAML, not this file. Kept for JSON-based tooling; the loader prefers YAML.",
+  "language": "zh-CN",
+  "timezone": "Asia/Tokyo",
+  "state_file": "state/seen-topics.json",
   "editions": [
     {
-      "focus": "欧美夜间发酵结果 + L1 源头层新面孔",
-      "label": "早报",
       "name": "morning",
-      "time": "06:00"
+      "label": "早报",
+      "time": "06:00",
+      "focus": "欧美夜间发酵结果 + L1 源头层新面孔"
     },
     {
-      "focus": "亚洲白天 + 欧美清晨；发酵确认、苗头增速复查、今日变化",
-      "label": "晚报",
       "name": "evening",
-      "time": "18:00"
+      "label": "晚报",
+      "time": "18:00",
+      "focus": "亚洲白天 + 欧美清晨；发酵确认、苗头增速复查、今日变化"
     }
   ],
+  "keywords": {
+    "mute": [],
+    "boost": [],
+    "alert": []
+  },
+  "topics": {
+    "AI Agents": 5,
+    "独立产品": 4,
+    "开发者工具": 4,
+    "内容创作": 3,
+    "社会观察": 2
+  },
   "filters": {
     "max_age_hours": null
+  },
+  "vocab": {
+    "window_days": 60,
+    "state_file": "state/vocab.json"
   },
   "grading": {
     "levels": [
@@ -23,9 +42,9 @@
       "关注",
       "苗头"
     ],
+    "min_sources_for_hotspot": 2,
     "max_items_per_report": 8,
     "max_seedlings": 3,
-    "min_sources_for_hotspot": 2,
     "relevance_topics": [
       "AI Agents",
       "独立产品",
@@ -34,12 +53,6 @@
       "社会观察"
     ]
   },
-  "keywords": {
-    "alert": [],
-    "boost": [],
-    "mute": []
-  },
-  "language": "zh-CN",
   "review": {
     "after_days": 14,
     "baseline_multiplier": 2,
@@ -47,101 +60,17 @@
     "rule": "话题被报告 14 天后回看：搜索热度峰值超过报告前基线 baseline_multiplier 倍且至少 min_points 点 = 命中"
   },
   "sources": {
-    "app_store": {
-      "charts": [
-        "top-grossing",
-        "top-free"
-      ],
-      "country": "us",
-      "layer": 2,
-      "limit": 25,
-      "rule": "榜单是钱信号：AI 应用冲进畅销榜 = 有真实付费需求，不只是讨论"
-    },
-    "arxiv": {
-      "categories": [
-        "cs.AI",
-        "cs.CL",
-        "cs.LG"
-      ],
+    "x": {
       "layer": 1,
-      "max_results": 30,
-      "rule": "最新提交的论文：新方法/新模型名的最早出处之一"
-    },
-    "bluesky": {
-      "accounts": [
-        "simonwillison.net",
-        "karpathy.bsky.social",
-        "gdb.bsky.social",
-        "techcrunch.com",
-        "theverge.com",
-        "wired.com",
-        "arstechnica.com"
-      ],
-      "layer": 1,
-      "per_account": 10,
-      "rule": "关键账号的公开 RSS（免 key 读 Bluesky 的唯一路）；整组只算一个源"
-    },
-    "civitai": {
-      "layer": 1,
-      "limit": 20,
-      "rule": "最新社区模型（仅 SFW）；某基座突然被大量微调 = 扩散信号"
-    },
-    "daily_papers": {
-      "layer": 1,
-      "limit": 30,
-      "rule": "HF 社区票选论文：arXiv 的已筛选版，与 arXiv 互补"
-    },
-    "devto": {
-      "layer": 2,
-      "per_page": 30,
-      "rule": "开发者社区热文（top 当日）",
-      "top_days": 1
-    },
-    "github": {
-      "layer": 1,
-      "max_age_days": 14,
-      "min_stars_delta": 400,
-      "min_stars_per_day": 200,
-      "rule": "爆发仓库：创建天数 <= max_age_days 且日均 stars >= min_stars_per_day，或单日增量 >= min_stars_delta"
-    },
-    "google_news": {
-      "layer": 2,
-      "rule": "同一事件多家报道 = 已进入扩散层",
-      "topics": [
-        "technology",
-        "ai"
-      ]
-    },
-    "google_trends": {
-      "layer": 3,
-      "rule": "只核对入选话题的曲线形状，永不作为发现来源",
-      "verify_only": true
-    },
-    "hackernews": {
-      "layer": 1,
-      "rule": "首页或高分新帖"
-    },
-    "hf_spaces": {
-      "layer": 1,
-      "rule": "Trending Spaces 前 50 里的新面孔（人们真正上手试的 demo）",
-      "top_n": 50
-    },
-    "huggingface": {
-      "layer": 1,
-      "rule": "Trending models / Spaces 前 50 里的新面孔",
-      "top_n": 50
-    },
-    "lobsters": {
-      "layer": 2,
-      "rule": "hottest 列表；与 HN 互为发酵交叉验证"
-    },
-    "mastodon": {
-      "instance": "mastodon.social",
-      "layer": 2,
-      "limit": 20,
-      "rule": "trending links/tags 的当日独立账号数 = 社交讨论量（X 无免费 API 时的替代社交信号）"
+      "accounts": [],
+      "min_accounts": 2,
+      "min_likes_single": 100,
+      "rule": "一个新名字被 >=2 个有影响力账号独立提到才算信号；单账号提及需 min_likes_single"
     },
     "official_blogs": {
+      "layer": 1,
+      "per_feed": 5,
+      "rule": "实验室/公司官方博客一手公告；整组只算一个源，防止自家通稿冒充多源共振",
       "feeds": [
         {
           "name": "OpenAI News",
@@ -179,10 +108,32 @@
           "name": "BAIR",
           "url": "https://bair.berkeley.edu/blog/feed.xml"
         }
-      ],
+      ]
+    },
+    "github": {
       "layer": 1,
-      "per_feed": 5,
-      "rule": "实验室/公司官方博客一手公告；整组只算一个源，防止自家通稿冒充多源共振"
+      "max_age_days": 14,
+      "min_stars_per_day": 200,
+      "min_stars_delta": 400,
+      "rule": "爆发仓库：创建天数 <= max_age_days 且日均 stars >= min_stars_per_day，或单日增量 >= min_stars_delta"
+    },
+    "hackernews": {
+      "layer": 1,
+      "rule": "首页或高分新帖"
+    },
+    "show_hn": {
+      "layer": 1,
+      "rule": "Show HN 发布帖：独立产品自发布的第一现场"
+    },
+    "huggingface": {
+      "layer": 1,
+      "top_n": 50,
+      "rule": "Trending models / Spaces 前 50 里的新面孔"
+    },
+    "hf_spaces": {
+      "layer": 1,
+      "top_n": 50,
+      "rule": "Trending Spaces 前 50 里的新面孔（人们真正上手试的 demo）"
     },
     "openrouter": {
       "layer": 1,
@@ -190,51 +141,59 @@
       "new_days": 14,
       "rule": "最新上架模型按创建时间排序；new_days 内上架标 is_new"
     },
+    "civitai": {
+      "layer": 1,
+      "limit": 20,
+      "rule": "最新社区模型（仅 SFW）；某基座突然被大量微调 = 扩散信号"
+    },
+    "arxiv": {
+      "layer": 1,
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "max_results": 30,
+      "rule": "最新提交的论文：新方法/新模型名的最早出处之一"
+    },
+    "daily_papers": {
+      "layer": 1,
+      "limit": 30,
+      "rule": "HF 社区票选论文：arXiv 的已筛选版，与 arXiv 互补"
+    },
+    "bluesky": {
+      "layer": 1,
+      "per_account": 10,
+      "rule": "关键账号的公开 RSS（免 key 读 Bluesky 的唯一路）；整组只算一个源",
+      "accounts": [
+        "simonwillison.net",
+        "karpathy.bsky.social",
+        "gdb.bsky.social",
+        "techcrunch.com",
+        "theverge.com",
+        "wired.com",
+        "arstechnica.com"
+      ]
+    },
     "producthunt": {
       "layer": 1,
       "rule": "当日新品；无 token 时走公开 Atom feed（无票数）"
     },
     "reddit": {
       "layer": 2,
-      "rule": "rising/热帖前列；特别留意 'is there a tool that…' 式说出口的需求",
       "subreddits": [
         "all",
         "artificial",
         "LocalLLaMA",
         "SideProject",
         "technology"
-      ]
-    },
-    "show_hn": {
-      "layer": 1,
-      "rule": "Show HN 发布帖：独立产品自发布的第一现场"
-    },
-    "sitemaps": {
-      "layer": 2,
-      "rule": "AI 工具目录站 sitemap 里的新工具页；整组只算一个源（目录站会互相抄）",
-      "sites": [
-        {
-          "max_age_days": 7,
-          "name": "futurepedia",
-          "pattern": "/tool/([^/]+)$",
-          "url": "https://www.futurepedia.io/sitemap_tools.xml"
-        },
-        {
-          "name": "toolify",
-          "pattern": "/tool/([^/]+)/?$",
-          "shard_pattern": "sitemap_tools_(\\d+)\\.xml$",
-          "shards_to_read": 1,
-          "url": "https://www.toolify.ai/sitemap.xml"
-        },
-        {
-          "name": "dang.ai",
-          "pattern": "dang\\.ai/([^/]+)$",
-          "skip": "^(about|advertise|blog|pricing|login|signup)$",
-          "url": "https://dang.ai/sitemap.xml"
-        }
-      ]
+      ],
+      "rule": "rising/热帖前列；特别留意 'is there a tool that…' 式说出口的需求"
     },
     "tech_media": {
+      "layer": 2,
+      "per_feed": 5,
+      "rule": "科技媒体 + 独立作者；整组只算一个源，多家转述同一件事不算多源共振",
       "feeds": [
         {
           "name": "TechCrunch · AI",
@@ -268,31 +227,134 @@
           "name": "Latent Space",
           "url": "https://www.latent.space/feed"
         }
-      ],
+      ]
+    },
+    "devto": {
       "layer": 2,
-      "per_feed": 5,
-      "rule": "科技媒体 + 独立作者；整组只算一个源，多家转述同一件事不算多源共振"
+      "top_days": 1,
+      "per_page": 30,
+      "rule": "开发者社区热文（top 当日）"
+    },
+    "lobsters": {
+      "layer": 2,
+      "rule": "hottest 列表；与 HN 互为发酵交叉验证"
+    },
+    "mastodon": {
+      "layer": 2,
+      "instance": "mastodon.social",
+      "limit": 20,
+      "rule": "trending links/tags 的当日独立账号数 = 社交讨论量（X 无免费 API 时的替代社交信号）"
     },
     "wikipedia": {
       "layer": 2,
       "limit": 25,
       "rule": "英文维基昨日热读榜：大众注意力确认 + 社会观察供稿；过滤 Main_Page/Special 等元页面"
     },
-    "x": {
-      "accounts": [],
-      "layer": 1,
-      "min_accounts": 2,
-      "min_likes_single": 100,
-      "rule": "一个新名字被 >=2 个有影响力账号独立提到才算信号；单账号提及需 min_likes_single"
+    "sitemaps": {
+      "layer": 2,
+      "rule": "AI 工具目录站 sitemap 里的新工具页；整组只算一个源（目录站会互相抄）",
+      "state_file": "state/sitemap-seen.json",
+      "sites": [
+        {
+          "name": "futurepedia",
+          "url": "https://www.futurepedia.io/sitemap_tools.xml",
+          "pattern": "/tool/([^/]+)$",
+          "max_age_days": 7
+        },
+        {
+          "name": "toolify",
+          "url": "https://www.toolify.ai/sitemap.xml",
+          "shard_pattern": "sitemap_tools_(\\d+)\\.xml$",
+          "shards_to_read": 1,
+          "pattern": "toolify\\.ai/tool/([^/]+)/?$"
+        },
+        {
+          "name": "dang.ai",
+          "url": "https://dang.ai/sitemap.xml",
+          "pattern": "dang\\.ai/([^/]+)$",
+          "skip": "^(about|advertise|blog|pricing|login|signup)$"
+        },
+        {
+          "name": "glama",
+          "url": "https://glama.ai/sitemap.xml",
+          "shard_patterns": [
+            "mcp-servers/(\\d+)\\.xml$",
+            "mcp-remote-servers/(\\d+)\\.xml$"
+          ],
+          "shards_to_read": 2,
+          "pattern": "/mcp/(?:servers|connectors)/(.+)$"
+        },
+        {
+          "name": "mcp.so",
+          "url": "https://mcp.so/sitemap.xml",
+          "shard_pattern": "section=servers&page=(\\d+)$",
+          "shards_to_read": 2,
+          "pattern": "/servers/([^/]+)$"
+        },
+        {
+          "name": "lobehub-mcp",
+          "url": "https://lobehub.com/sitemap/mcp.xml",
+          "pattern": "lobehub\\.com/mcp/([^/]+)$"
+        },
+        {
+          "name": "lobehub-skills",
+          "url": "https://lobehub.com/sitemap/skills.xml",
+          "pattern": "lobehub\\.com/skills/([^/]+)$"
+        },
+        {
+          "name": "aixploria",
+          "url": "https://www.aixploria.com/sitemap.xml",
+          "shard_pattern": "sitemap-posttype-post\\.(\\d{6})\\.xml$",
+          "shards_to_read": 1,
+          "pattern": "aixploria\\.com/([^/]+)/$"
+        },
+        {
+          "name": "opentools",
+          "url": "https://opentools.ai/sitemap.xml",
+          "shard_pattern": "/tools-sitemap\\.xml$",
+          "shards_to_read": 1,
+          "pattern": "/tools/([^/]+)$"
+        },
+        {
+          "name": "clipfly",
+          "url": "https://www.clipfly.ai/sitemaps/en.xml",
+          "pattern": "clipfly\\.ai/(?!pt/|es/|fr/|de/|ja/|ko/|zh/)[a-z0-9-]+/([a-z0-9-]+)/$"
+        },
+        {
+          "name": "aitoptools",
+          "url": "https://aitoptools.com/sitemap.xml",
+          "pattern": "/tool/([^/]+)/?$"
+        },
+        {
+          "name": "ai-bot.cn",
+          "url": "https://ai-bot.cn/sitemap.xml",
+          "pattern": "ai-bot\\.cn/([^/]+)/$",
+          "skip": "^(about|contact|privacy|terms|submit|sitemap|vipcheap-banner)"
+        }
+      ]
+    },
+    "app_store": {
+      "layer": 2,
+      "country": "us",
+      "charts": [
+        "top-grossing",
+        "top-free"
+      ],
+      "limit": 25,
+      "rule": "榜单是钱信号：AI 应用冲进畅销榜 = 有真实付费需求，不只是讨论"
+    },
+    "google_news": {
+      "layer": 2,
+      "topics": [
+        "technology",
+        "ai"
+      ],
+      "rule": "同一事件多家报道 = 已进入扩散层"
+    },
+    "google_trends": {
+      "layer": 3,
+      "verify_only": true,
+      "rule": "只核对入选话题的曲线形状，永不作为发现来源"
     }
-  },
-  "state_file": "state/seen-topics.json",
-  "timezone": "Asia/Tokyo",
-  "topics": {
-    "AI Agents": 5,
-    "内容创作": 3,
-    "开发者工具": 4,
-    "独立产品": 4,
-    "社会观察": 2
   }
 }

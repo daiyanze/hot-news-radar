@@ -9,3 +9,5 @@ state/candidates-*.json
 config.yaml
 config.yml
 *.egg-info/
+state/vocab.json
+state/sitemap-seen.json

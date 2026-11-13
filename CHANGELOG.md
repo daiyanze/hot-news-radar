@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0 — 2026-11-13
+
+继续借鉴 new-term-radar 还没借的三件（其付费部分——AIsa 链接图谱、DataForSEO 关键词量——不借）：
+
+- **新词词汇表**（`radar/vocab.py`）：new-term-radar 的核心机制是维护滚动词汇表、只认「第一次被说出口」的名字。本仓库没有 X 火箭筒，改为落在实体型源上（GitHub / HF / HF Spaces / OpenRouter / Civitai / Product Hunt / 目录站 / App Store）：名字在 `vocab.window_days`（默认 60）内没在候选流出现过 → 候选打 `"novel": true`，状态存 `state/vocab.json`。第一次运行只建基线、不打标。实测：基线 268 个名字，第二轮即标出 2 个新名字（OpenRouter 新模型、Product Hunt 新品）。
+- **sitemap 快照 diff**：从「lastmod 时间窗口」改为快照比对（`state/sitemap-seen.json` 按目录留档全部见过的工具页 URL，90 天未现自动遗忘），只报新 URL，同一工具永不重复播报。第一次运行每个目录只建基线（note 里列出各目录基线量）。实测 12 家基线共约 6 万个 URL；对照实验中人为从快照删掉的 3 个 URL 被精确地作为新条目报回。
+- **目录站 3 → 12 家**：新增 Glama、mcp.so、LobeHub MCP、LobeHub Skills、Aixploria、OpenTools、Clipfly、aitoptools、ai-bot.cn（逐个实测结构后定 pattern）。索引分片解析泛化：支持多组 shard_patterns（Glama 的 servers + remote-servers）、非数字分片按文档顺序（OpenTools 的命名分片）、`?section=…&page=N` 分页（mcp.so）。顺带修三个实测发现的问题：无时区 lastmod 与带时区的混排会崩（已统一补 UTC 并加回归测试）；Toolify 最新分片含多语言路径（`/de/tool/…`）导致同一工具多语言重复（pattern 改锚定域名，与 LobeHub 的处理一致）；slug 里的百分号编码统一解码再生成名字。
+- 注意：升级后第一次扫描，sitemap 组不出条目（建基线）、vocab 不打标，属预期行为，报告 note 与候选文件里都有说明。测试增至 44 个，全过。
+
 ## 0.4.0 — 2026-11-13
 
 - 配置迁 YAML：新增 `config.example.yaml`（带注释），加载顺序 config.yaml > config.yml > config.json > config.example.*，旧 JSON 配置照常可读；`config.example.json` 改为由 YAML 生成的镜像（文件内有标注）。解析优先用 PyYAML（装了的话），否则用内置子集解析器 `radar/yamlmini.py`——零依赖不变，两个解析器对示例配置的输出经测试逐字节一致（结构相等）。

@@ -24,6 +24,7 @@ description: Run one edition (morning/evening) of the twice-daily web hot-topic 
    - 某个源查不到：记入报告「本期缺失」，禁止用其他源内容冒充。
 2. **判定信号**（用 config 的门槛）：
    - 候选文件已过用户控制层：屏蔽词命中的已被代码丢弃（`controls.muted` 是丢弃数）；带 `keyword_hits.alert` 的候选汇在 `keyword_alerts` 里，带 `keyword_hits.boost` 的是用户关注词命中，带 `topic_hits` 的附主题权重——分级时按下面第 3 步用。
+   - 带 `"novel": true` 的候选（0.5.0）：实体型源里这个名字在词汇表窗口（默认 60 天）内第一次出现，是优先级最高的苗头信号，单源也优先核查；候选文件顶层 `vocab` 字段是本轮统计（`baseline: true` 表示第一次运行只建了基线、本轮无 novel 可用）。目录站 sitemap 组已改快照 diff：条目都是上次扫描后新收录的页，不会重复出现；某个目录第一次运行只建基线（note 里会写），不出条目是正常现象。
    - 同一话题 ≥ `min_sources_for_hotspot` 个独立源 = 热点候选；单源 = 苗头。
    - GitHub：年龄与 stars 增速按 config 的 github 规则；X：按 config 的 x 规则；HN/Reddit：进首页/rising 前列。
    - 只保留「具体的新东西」（新模型/产品/仓库/事件名）；泛词（dashboard、pricing 之类）一律丢弃。
