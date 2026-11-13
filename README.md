@@ -30,11 +30,37 @@ python -m pytest -q tests            # 逻辑测试，不碰网络
 
 ## 抓取层（0.3.0 扩源）
 
-`python -m radar scan --edition morning` 跑全部抓取器，候选写入 `state/candidates-<日期>-<期次>.json`。共 19 个源，全部免费、免 key（唯一的例外是 X）：
+`python -m radar scan --edition morning` 跑全部抓取器，候选写入 `state/candidates-<日期>-<期次>.json`。
 
-- L1 源头层（11）：官方博客 RSS 组（OpenAI/DeepMind/Google Research/HF/Mistral/NVIDIA/AWS/GitHub Blog/BAIR，仿 [AIHOT](https://github.com/KKKKhazix/AIHOT) 的 T1 分级）、GitHub（爆发仓 Search API + Trending 页）、Hacker News（Algolia）、Show HN、Hugging Face models、HF Spaces、OpenRouter（最新上架模型）、Civitai（最新社区模型）、arXiv（最新论文）、Product Hunt（公开 Atom feed；有 `PRODUCTHUNT_TOKEN` 时走 GraphQL 取票数）、X（需 `X_BEARER_TOKEN` 且 config 里配账号，未配置时如实报缺失、由 agent 网页扫补位）。
-- L2 发酵层（8）：Reddit（JSON，失败自动降级 RSS——无分数）、科技媒体 RSS 组（TechCrunch/The Verge/Ars Technica/MIT TR/The Decoder/Simon Willison/Import AI/Latent Space，AIHOT 的 T2 分级）、DEV、Lobsters、Mastodon 趋势、目录站 sitemap 组（Futurepedia/Toolify/dang.ai，借鉴 [new-term-radar](https://github.com/zhuyansen/new-term-radar) 的 sitemap 信号）、App Store 美区双榜（营销工具接口不稳时自动降级旧版 iTunes feed）、Google News（RSS）。
-- **组源只算一个源**：RSS 组和 sitemap 组内部再多家，跨源共振时整组计 1——通稿被十家转述、工具被五个目录抄录，都不算多源共振。
+### 信息源清单（共 19 个，18 个完全免费）
+
+**18 个源完全免费：免付费、免注册、免 API key**，clone 下来就能跑。只有 X 一个例外（官方 API 收费）。
+
+| 信息源 | 层 | 读什么 | 费用 |
+|---|---|---|---|
+| 官方博客组（OpenAI、DeepMind、Google Research、Hugging Face、Mistral、NVIDIA、AWS ML、GitHub Blog、BAIR） | L1 源头 | 实验室/公司一手公告（RSS，仿 [AIHOT](https://github.com/KKKKhazix/AIHOT) 的 T1 分级） | 免费 |
+| GitHub | L1 源头 | 爆发仓库（Search API）+ Trending 页 | 免费 |
+| Hacker News | L1 源头 | 首页/高分新帖（Algolia API） | 免费 |
+| Show HN | L1 源头 | 独立产品发布帖（Algolia API） | 免费 |
+| Hugging Face Models | L1 源头 | Trending 模型前 50 的新面孔 | 免费 |
+| HF Spaces | L1 源头 | Trending Spaces 前 50（人们真正上手试的 demo） | 免费 |
+| OpenRouter | L1 源头 | 最新上架模型（按创建时间排序） | 免费 |
+| Civitai | L1 源头 | 最新社区模型（仅 SFW） | 免费 |
+| arXiv | L1 源头 | cs.AI / cs.CL / cs.LG 最新提交论文 | 免费 |
+| Product Hunt | L1 源头 | 当日新品（公开 Atom feed；有 token 时走 GraphQL 取票数） | 免费 |
+| X | L1 源头 | 关键账号的新动态 | ⚠️ 需自备 `X_BEARER_TOKEN`（官方 API 付费）；未配置时如实报缺失，由 agent 网页扫补位 |
+| Reddit | L2 发酵 | 配置版块的热帖（JSON，失败自动降级 RSS） | 免费 |
+| 科技媒体组（TechCrunch、The Verge、Ars Technica、MIT Technology Review、The Decoder、Simon Willison、Import AI、Latent Space） | L2 发酵 | 媒体报道 + 独立作者（RSS，AIHOT 的 T2 分级） | 免费 |
+| DEV (dev.to) | L2 发酵 | 开发者社区当日热文 | 免费 |
+| Lobsters | L2 发酵 | hottest 列表，与 HN 互为交叉验证 | 免费 |
+| Mastodon | L2 发酵 | 大实例（mastodon.social）的 trending links/tags，附当日独立账号数 | 免费 |
+| 目录站 sitemap 组（Futurepedia、Toolify、dang.ai） | L2 发酵 | AI 工具目录的新工具页（借鉴 [new-term-radar](https://github.com/zhuyansen/new-term-radar) 的 sitemap 信号） | 免费 |
+| App Store | L2 发酵 | 美区畅销榜 + 免费榜（接口不稳时自动降级旧版 iTunes feed） | 免费 |
+| Google News | L2 发酵 | 科技/AI 头条（RSS） | 免费 |
+
+另有 L3 验证层 Google Trends（免费）：只核对已入选话题的曲线，从不作为发现来源，不占抓取器名额。
+
+- **组源只算一个源**：官方博客组、科技媒体组、sitemap 组内部再多家，跨源共振时整组计 1——通稿被十家转述、工具被五个目录抄录，都不算多源共振。
 - 2026-11-13 实测：19 个源 18 个实时出数（约 600 条候选），仅 X 缺失（无 token）。
 - MCP server 已可用（`python -m radar.mcp_server`，仅标准库）：工具 `radar_scan`、`radar_review`。
 
