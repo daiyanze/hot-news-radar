@@ -1,0 +1,156 @@
+{
+  "date": "2026-11-12",
+  "slot": "evening",
+  "title": "热点雷达 · 晚报",
+  "published_at": "2026-11-12T18:00:00+09:00",
+  "items": [
+    {
+      "title": "Nvidia 董事会拟罢免黄仁勋",
+      "level": "must",
+      "is_new": true,
+      "sources": [
+        "WSJ",
+        "NYT",
+        "BBC",
+        "Hacker News",
+        "Reddit"
+      ],
+      "links": [
+        "https://www.wsj.com/business/nvidia-is-preparing-to-oust-nvidia-ceo-jensen-huang-30f421ad",
+        "https://news.ycombinator.com/item?id=50459703"
+      ],
+      "body": "WSJ 11 月 11 日报道：董事会正准备罢免 CEO 黄仁勋，事由为两段婚外情（其一涉及被美方怀疑为中国情报人员的 Alice Huang，另一位为其下属高管）；董事会最早 11 月 12 日开会决定其去留。黄仁勋 11 月 8 日已在内部信中承认不忠并道歉。消息后英伟达股价盘后跌约 8%，Polymarket 上黄仁勋年内离职的概率升至 77%。HN 960 分 / 1,298 评，Reddit r/technology 与 r/LocalLLaMA 多帖热议。注意：同期流传的仿 WSJ 截图多为伪造，以 WSJ 原文为准。",
+      "action": "仅记录；社会观察角度可写 tweet，不跟进八卦细节。"
+    },
+    {
+      "title": "DeepSeek dsh-superagent + V4.1-Flash-1017",
+      "level": "must",
+      "is_new": true,
+      "sources": [
+        "GitHub",
+        "Hugging Face"
+      ],
+      "links": [
+        "https://github.com/deepseek-ai/dsh-superagent-prototype",
+        "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017",
+        "https://medium.com/@geekcoding101/i-ran-deepseeks-dsh-superagent-end-to-end-a-hands-on-deep-dive-c18d30d26d48"
+      ],
+      "body": "10 月 31 日发布的开源研究原型：监听单个 GitHub 仓库（可选飞书），自主判断哪些消息是真实工作请求，开工单、跑独立 agent 会话、回原帖交 PR。GitHub 22,631 stars，11 天日均 2,057，发布 2 天内破 9,000。配套模型 DeepSeek-V4.1-Flash-1017 在 HF 获 5,545 likes、34.9 万下载。第三方实测跑通全流程：一次会话 API 成本 $0.06，提示词缓存命中率 94–96%。作者自述仅为研究原型、非正式产品，大量工程由 coding agent 完成。",
+      "action": "深入研究；agent 自主化这条线值得写。"
+    },
+    {
+      "title": "United 航空禁 AI agent 订票",
+      "level": "watch",
+      "is_new": true,
+      "sources": [
+        "NYT",
+        "CBS",
+        "WSJ",
+        "USA Today",
+        "Hacker News"
+      ],
+      "links": [
+        "https://www.usatoday.com/story/travel/airline-news/2026/11/11/united-ai-travel-agents-booking/92728156007/",
+        "https://news.ycombinator.com/item?id=50458900"
+      ],
+      "body": "11 月 11 日修订运输合同：新增 Rule 6.J.6，禁止用 AI agent 订票、改票、买座位与升舱；Rule 5.H 允许无通知取消由 AI agent 订改的票。理由是数据安全与 FAA/DOT 值机合规（值机需旅客本人确认禁运品规则）。首家正式立规的美国航司；agent 仍可查价，但下单须旅客本人完成。HN 542 分 / 528 评。",
+      "action": "立项观察；agent 落地遇阻的标志性事件。"
+    },
+    {
+      "title": "Anthropic IPO 升级：S-1/A 称已触发 AI 研发加速阈值",
+      "level": "watch",
+      "is_new": false,
+      "sources": [
+        "Reddit r/artificial",
+        "Reddit r/technology",
+        "SEC S-1/A"
+      ],
+      "links": [
+        "https://www.reddit.com/r/artificial/comments/1xtr9oc/anthropic_says_a_key_ai_safety_alarm_has_been/",
+        "https://medium.com/@lssmj2014/met-on-expectation-the-alarm-and-the-price-sheet-in-one-document-a184e86d974a"
+      ],
+      "body": "11 月 10 日第二份 S-1/A 修正案把表述从 11 月 2 日的“可能即将触发”改为“已触发”其 Responsible Scaling Policy 中“AI 显著加速 AI 研发”的阈值；依据是内部对未来模型的预期，而非当前模型的实测表现，未点名任何模型。METR 11 月 5 日报告称越线可能早在 7 月 15 日前后。定价区间 $70–78、募资最高 $64.35 亿不变，11 月 18 日定价、19 日首日交易。另：Anthropic 新版 Supported Regions 政策今日生效，中国大陆/港澳/俄罗斯不在支持名单，且覆盖当地注册企业及其全球员工（支持名单本身自 5 月未变，属澄清性收紧）。",
+      "action": "仅记录，等 19 日首日表现。"
+    },
+    {
+      "title": "Gemini Decisions API（Gemini Decision 1）",
+      "level": "watch",
+      "is_new": true,
+      "sources": [
+        "blog.google",
+        "Hacker News",
+        "X"
+      ],
+      "links": [
+        "https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/",
+        "https://news.ycombinator.com/item?id=50456791"
+      ],
+      "body": "Google 11 月 11 日发布：新模型 Gemini Decision 1 + Decisions API，专做封闭式决策（工具选择、策略检查、模型路由、上下文打分），一次请求可对同一多模态输入（文本/图像/音频/视频/PDF，最高 256K tokens）评 1,000 个是非/选择/打分题，单次前向返回概率与置信度，端到端延迟 150–250ms，$0.10/百万输入 tokens、输出免费，AI Studio 有免费层。HN 416 分 / 125 评，Pichai 在 X 发帖，Latent Space 称 11 月 11 日为“决策模型日”（OpenAI 9 月已有同类 API，TypeSafe Jev 在先）。",
+      "action": "值得试；agent 路由/工具选择场景可直接用。"
+    },
+    {
+      "title": "craft-anything",
+      "level": "seed",
+      "is_new": true,
+      "sources": [
+        "GitHub"
+      ],
+      "links": [
+        "https://github.com/storytold/craft-anything"
+      ],
+      "body": "纯 Rust 逆向重建引擎：用 284 个分析工具检查网站/App/游戏，再让 coding agent 重建一个自己的版本并与原作逐项比对。GitHub 29,045 stars，11 天日均 2,640，全场增速第一；v0.6.1 今日发布。仅 GitHub 单源（HN 帖仅 6 分），作者自述早期 alpha，默认 clean-room 模式。",
+      "action": "仅记录。"
+    },
+    {
+      "title": "unslop",
+      "level": "seed",
+      "is_new": true,
+      "sources": [
+        "GitHub"
+      ],
+      "links": [
+        "https://github.com/heydamir/unslop"
+      ],
+      "body": "Claude skill：九遍审计并修复“AI 味 UI”（紫渐变、发光卡片、emoji 标签、间距不均），按产品本身定方向再逐屏改。GitHub 14,767 stars，13 天日均 1,136，作者 Damir Sokolovsky（X 上的 Unslopping 系列）。与 Dai 的去 AI 味需求直接相关。",
+      "action": "仅记录，可装来试。"
+    },
+    {
+      "title": "Agent skills 集群",
+      "level": "seed",
+      "is_new": true,
+      "sources": [
+        "GitHub",
+        "Hacker News"
+      ],
+      "links": [
+        "https://github.com/janestreet/agent_skills"
+      ],
+      "body": "Jane Street 官方 agent_skills 仓库：6,512 stars，8 天日均 814；HN 上其 Socratic Tutor skill 帖 90 分。同题材：addyosmani/agent-skills 今日 +787 stars，vercel-labs/agent-browser 今日 +708。Agent skills 正在成一类仓库。",
+      "action": "仅记录。"
+    }
+  ],
+  "updates": [
+    "Anthropic IPO 👀→升级：S-1/A 改口称已触发 AI 研发加速阈值；区域政策今日生效",
+    "48 个 AI Agent 找玛雅金字塔 👀→涨：HN 853 分/313 评 → 981 分/358 评",
+    "AWS 官方模拟器 🌱→涨：HN 361 分/113 评 → 827 分/232 评",
+    "astryx →平：仍 GitHub Trending 第 1，今日 +2,776 stars（早报 +2,842）",
+    "MiniMax H3-Image →平：HF 788 likes / 14.3 万下载，仍在 PH 榜单第 6",
+    "Qwen4-Max Preview →平：无新大动作；r/LocalLLaMA 出现“Qwen4 将至、GitHub 有 PR”传闻帖，未证实",
+    "Claude Fable 5.2 →平：r/artificial 仍有千 agent 建 OS 的帖子，无新数字",
+    "Gemini 4 Carbon →平：无新消息",
+    "Nod by n8n →平/微凉：不再是 PH 当日第 1（今日头名据 Trendoday 镜像为 bonds chat），仍在 PH 周榜",
+    "Llamalook →凉：今日 Reddit 未见新动静；Tether BotPsy →凉：今日未见",
+    "Gemini Robotics 2.5 + AlphaGenome 2 →平：无新动静；Muse Ember →平：仍在 PH 周榜"
+  ],
+  "missing": [
+    "X Trending 和帖文 likes 未直接读取（无 token）；X 信号为搜索二手转述，Latent Space 日报与 The Neuron 摘要确认 Nvidia、Gemini Decision 1 为当日 X 热议",
+    "Product Hunt 未直读（无 token）；当日榜单据 Trendoday 镜像与 hunted.space 排名，upvote 数未核实",
+    "Reddit 直读为 RSS，无分数；r/all rising 未直读",
+    "Google Trends 本期未核对",
+    "Hugging Face Spaces 完整名单未查到（仅模型榜）"
+  ],
+  "pending_checks": [
+    "OpenAI “Cyber at the Frontier”直播，11 月 12 日 10:00 PT（北京时间 11 月 13 日 02:00），尚未开始",
+    "Anthropic 2026 使用政策今日生效已核实：Supported Regions 政策覆盖中国大陆/港澳/俄罗斯，名单自 5 月未变"
+  ]
+}

@@ -1,0 +1,43 @@
+# Deploy the tripple-signals static site to GitHub Pages.
+# Runs when an edition file or the generator changes on main.
+# Requires Pages enabled in repo Settings (Source: GitHub Actions).
+name: pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "editions/**"
+      - "radar/publish.py"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate site
+        run: python -m radar.publish
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
