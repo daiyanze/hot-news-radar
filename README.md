@@ -1,8 +1,8 @@
-![tripple-signals · 每天两次，全网热点信号](assets/banner.png)
+![tripple-signals · 全网热点信号](assets/banner.png)
 
 # tripple-signals
 
-每天两扫的全网热点雷达：早 06:00 / 晚 18:00（JST），在热点到达大众搜索之前，从源头层抓到它。
+全网热点雷达：在热点到达大众搜索之前，从源头层抓到它。扫描频度由使用者自行定义，程序也可自行发现并更新。
 
 方法论见 [methodology.md](methodology.md)（写给人看的完整版）。公开站点与订阅（RSS/Atom）的计划见 [ROADMAP.md](ROADMAP.md)。本仓库把它拆成 agent 能直接用的四层：
 

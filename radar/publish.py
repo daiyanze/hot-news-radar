@@ -134,7 +134,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <link rel="icon" type="image/png" sizes="32x32" href="{asset_prefix}favicon-32.png">
 <link rel="apple-touch-icon" href="{asset_prefix}apple-touch-icon.png">
 <meta property="og:title" content="tripple-signals">
-<meta property="og:description" content="每天两次，全网热点信号 · 多源共振才算热点">
+<meta property="og:description" content="全网热点信号 · 多源共振才算热点">
 <meta property="og:image" content="{base_url}/banner.png">
 <link rel="stylesheet" href="{css_path}">
 <link rel="alternate" type="application/rss+xml" title="tripple-signals" href="{base_url}/feed.xml">
@@ -142,7 +142,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 </head>
 <body>
 <header><h1><img src="{asset_prefix}favicon.svg" alt="" style="height:1.2em;vertical-align:-0.24em;margin-right:.3em"><a href="{base_url}/" style="color:inherit;text-decoration:none">tripple-signals</a></h1>
-<p class="meta">每天两次，全网热点信号 · 可用 RSS / Atom 订阅</p></header>
+<p class="meta">全网热点信号 · 可用 RSS / Atom 订阅</p></header>
 <nav><a href="{base_url}/">最新一期</a> · <a href="{base_url}/archive.html">归档</a> · <a href="{base_url}/feed.xml">RSS</a> · <a href="{base_url}/atom.xml">Atom</a></nav>
 <main>
 <h1>{title}</h1>
@@ -191,7 +191,7 @@ def build_rss(editions: list[dict], base_url: str) -> str:
         "<channel>\n"
         "<title>tripple-signals</title>\n"
         f"<link>{esc(base_url.rstrip('/'))}/</link>\n"
-        "<description>每天两次，全网热点信号</description>\n"
+        "<description>全网热点信号</description>\n"
         "<language>zh-CN</language>\n" + "\n".join(items) + "\n</channel>\n</rss>\n"
     )
 
