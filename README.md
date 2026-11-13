@@ -9,7 +9,7 @@
 | 层 | 文件 | 作用 |
 |---|---|---|
 | 指令 | `skills/tripple-signals/SKILL.md` | agent 照着跑的执行步骤、判定规则、报告模板 |
-| 配置 | `config.example.json` | 信息源清单、量化门槛、时区与期次——调参只动这里 |
+| 配置 | `config.example.yaml` | 信息源清单、量化门槛、关键词、时区与期次——调参只动这里（YAML，JSON 兼容） |
 | 工具 | `radar/` | 确定性工作交给代码：状态存储、去重、14 天复盘（抓取器见路线图） |
 | 状态 | `state/seen-topics.json` | 话题台账（机器版）；`seen-topics.md` 是给人看的视图 |
 
@@ -18,10 +18,20 @@
 ## 快速开始
 
 ```bash
-cp config.example.json config.json   # 按需改源和门槛，config.json 不进 git
+python -m radar        # 一键扫描：按本地时间自动选期次，跑全部源，写候选文件
+```
+
+就这一条命令（零依赖，不用先装任何东西）。候选文件出来后，把它和 `skills/tripple-signals/SKILL.md` 交给你的 agent 出报告。其他用法：
+
+```bash
+cp config.example.yaml config.yaml   # 按需改源、门槛和关键词，config.yaml 不进 git
+python -m radar scan --edition morning   # 显式指定期次
 python -m radar review               # 列出到期该复盘的话题（14 天规则）
+pip install -e .                     # 装成命令后可直接运行 `radar`
 python -m pytest -q tests            # 逻辑测试，不碰网络
 ```
+
+配置是 **YAML**（`config.yaml`；装了 PyYAML 用完整语法，没装时内置子集解析器，仅标准库也能跑），旧的 `config.json` 照常兼容，加载顺序：`config.yaml > config.yml > config.json > config.example.*`。
 
 给 agent 用：把 `skills/tripple-signals/` 装进你的 agent（Claude Code / Codex 等），或直接让 agent 读 SKILL.md 按步骤执行。定时运行有两种方式：
 
@@ -66,6 +76,20 @@ python -m pytest -q tests            # 逻辑测试，不碰网络
 - **组源只算一个源**：官方博客组、科技媒体组、sitemap 组内部再多家，跨源共振时整组计 1——通稿被十家转述、工具被五个目录抄录，都不算多源共振。
 - 2026-11-13 实测：22 个源 21 个实时出数，仅 X 缺失（无 token）。
 - MCP server 已可用（`python -m radar.mcp_server`，仅标准库）：工具 `radar_scan`、`radar_review`。
+
+## 用户可控选项（0.4.0）
+
+都在 `config.yaml` 里，不填就用默认行为，老配置文件原样能跑：
+
+| 选项 | 写法 | 作用 |
+|---|---|---|
+| 屏蔽词 | `keywords.mute: [giveaway, airdrop]` | 命中（标题+摘要，子串、不分大小写）的候选直接丢弃 |
+| 关注词 | `keywords.boost: [mcp]` | 命中打标，agent 分级时可把单源苗头升为关注 |
+| 必看词 | `keywords.alert: [gemini]` | 命中打标并汇入候选文件的 `keyword_alerts`；再有第二源共振，agent 直接列为必看候选 |
+| 主题权重 | `topics: {AI Agents: 5, 社会观察: 2}` | 相关性打分按你的优先级（1–5），换行业主要改这一节 |
+| 每源开关 | `sources.<源>.enabled: false` | 关掉某个源；报告里单列「已停用」，不算缺失 |
+| 每源上限 | `sources.<源>.max_items: 20` | 抓完后统一截断（区别于各源自己的抓取参数 `limit`） |
+| 新鲜度窗口 | `filters.max_age_hours: 72` | 只对带时间戳的候选生效，太旧的丢弃；无时间戳的不拦 |
 
 ## 路线图
 

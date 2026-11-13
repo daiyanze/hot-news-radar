@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tripple-signals"
+version = "0.4.0"
+description = "Web hot-topic radar: layered free sources, deterministic fetch/filter in code, grading by an agent."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = []
+
+[project.scripts]
+radar = "radar.__main__:main"
+
+[tool.setuptools]
+packages = ["radar", "radar.fetchers"]

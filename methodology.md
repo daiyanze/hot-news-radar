@@ -116,3 +116,15 @@
 - 0.3.0 起抓取层共 19 个源，0.3.1 增至 22 个（新增 Daily Papers、Bluesky、Wikipedia 三个英文源；按 Dai 的选择，中文源 Bilibili/V2EX/少数派本轮不接）：21 个免 key 实抓（见第二节），只有 X 需要 token。试过但没接的：Stack Exchange API（本机出口 IP 被限流 11 小时，信号再好也不稳定）、Bluesky 公开搜索（403）、Microsoft Research RSS（403）——都等条件变化再议，不硬凑。
 - 只做公开信息的读取和汇总，不发帖、不互动。
 - 报告发回主聊天；台账和方法论都在 `~/workspace/hot-news-radar/` 下，可随时改。
+
+## 九、用户可控选项（0.4.0）
+
+配置自 0.4.0 起以 YAML 为主（`config.yaml`，JSON 兼容）。用户能控制的、且只控制「雷达看什么」而不动判定骨架的选项：
+
+- **关键词三件套**（子串匹配，作用于标题+摘要）：`keywords.mute` 屏蔽词（命中丢弃，管减法）、`keywords.boost` 关注词（命中打标，单源可升一级）、`keywords.alert` 必看词（命中汇入候选文件的 `keyword_alerts`，有第二源共振即列必看候选）。三者由代码在抓取后、共振分组前执行，分级仍归 agent。
+- **主题权重** `topics`：相关性从二值变权重（1–5），换行业主要改这一节；旧的平铺列表写法继续兼容（权重按 1）。
+- **每源开关与上限**：`sources.<源>.enabled: false` 关源（与「缺失」严格区分，不补扫、不报缺失）；`sources.<源>.max_items` 抓后统一截断（与各源自己的抓取参数 `limit` 不同）。
+- **新鲜度窗口** `filters.max_age_hours`：只过滤带可解析时间戳的候选（arXiv、RSS 组、Bluesky、Google News 等有时间戳；没有时间戳的源不因缺字段被误杀）。
+
+原则不变：不填 = 默认行为；选项只做过滤与打标，不替 agent 做语义判断。
+

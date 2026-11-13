@@ -1,7 +1,11 @@
 config.json
+site/
 __pycache__/
 *.pyc
 .pytest_cache/
 state/*.tmp
 state/candidates-*.json
 .DS_Store
+config.yaml
+config.yml
+*.egg-info/
