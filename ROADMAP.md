@@ -26,7 +26,7 @@ agent 扫描（现有早晚两次运行）
 1. **托管先用 GitHub Pages**：仓库已在 GitHub、Actions 已有骨架、零新增账号零成本；产物是纯静态文件，将来迁 Cloudflare Pages 只是换部署目标，内容不用动。Cloudflare 的优势（CDN 速度、边缘能力）在这个体量用不上。
 2. **生成器自己写，不用 Hugo/Jekyll**：全仓库只有 Python 一门语言，`radar/publish.py` 读期次文件 + 模板出 HTML 和 feed，几百行可控；不引入第二套工具链。
 3. **feed 出两份**：RSS 2.0 兼容性最好，Atom 规范更干净，成本只是多一个模板。每期一个条目，`guid` 用期次日期+早晚，永久不变；正文全文放进 `content:encoded` / Atom `content`。
-4. **站点 URL 先用默认域名** `daiyanze.github.io/tripple-signals`；自定义域名（如 signals.grant-dai.com）等有读者再绑，GitHub Pages 支持随时加，feed 里用配置项 `base_url` 生成绝对链接，换域名只改一处配置。
+4. **站点 URL 先用默认域名** `daiyanze.github.io/triple-sigma`；自定义域名（如 signals.grant-dai.com）等有读者再绑，GitHub Pages 支持随时加，feed 里用配置项 `base_url` 生成绝对链接，换域名只改一处配置。
 
 ## 分阶段
 

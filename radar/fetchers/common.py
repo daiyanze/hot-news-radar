@@ -19,7 +19,7 @@ import json
 import urllib.request
 import xml.etree.ElementTree as ET
 
-USER_AGENT = "tripple-signals/0.5.0 (+https://github.com/daiyanze/tripple-signals)"
+USER_AGENT = "triple-sigma/0.5.1 (+https://github.com/daiyanze/triple-sigma)"
 TIMEOUT = 25
 
 ATOM = "{http://www.w3.org/2005/Atom}"

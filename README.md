@@ -1,6 +1,6 @@
-![tripple-signals · 全网热点信号](assets/banner.png)
+![triple-sigma · 全网热点信号](assets/banner.png)
 
-# tripple-signals
+# triple-sigma
 
 全网热点雷达：在热点到达大众搜索之前，从源头层抓到它。扫描频度由使用者自行定义，程序也可自行发现并更新。
 
@@ -8,7 +8,7 @@
 
 | 层 | 文件 | 作用 |
 |---|---|---|
-| 指令 | `skills/tripple-signals/SKILL.md` | agent 照着跑的执行步骤、判定规则、报告模板 |
+| 指令 | `skills/triple-sigma/SKILL.md` | agent 照着跑的执行步骤、判定规则、报告模板 |
 | 配置 | `config.example.yaml` | 信息源清单、量化门槛、关键词、时区与期次——调参只动这里（YAML，JSON 兼容） |
 | 工具 | `radar/` | 确定性工作交给代码：状态存储、去重、14 天复盘（抓取器见路线图） |
 | 状态 | `state/seen-topics.json` | 话题台账（机器版）；`seen-topics.md` 是给人看的视图 |
@@ -21,7 +21,7 @@
 python -m radar        # 一键扫描：按本地时间自动选期次，跑全部源，写候选文件
 ```
 
-就这一条命令（零依赖，不用先装任何东西）。候选文件出来后，把它和 `skills/tripple-signals/SKILL.md` 交给你的 agent 出报告。其他用法：
+就这一条命令（零依赖，不用先装任何东西）。候选文件出来后，把它和 `skills/triple-sigma/SKILL.md` 交给你的 agent 出报告。其他用法：
 
 ```bash
 cp config.example.yaml config.yaml   # 按需改源、门槛和关键词，config.yaml 不进 git
@@ -33,7 +33,7 @@ python -m pytest -q tests            # 逻辑测试，不碰网络
 
 配置是 **YAML**（`config.yaml`；装了 PyYAML 用完整语法，没装时内置子集解析器，仅标准库也能跑），旧的 `config.json` 照常兼容，加载顺序：`config.yaml > config.yml > config.json > config.example.*`。
 
-给 agent 用：把 `skills/tripple-signals/` 装进你的 agent（Claude Code / Codex 等），或直接让 agent 读 SKILL.md 按步骤执行。定时运行有两种方式：
+给 agent 用：把 `skills/triple-sigma/` 装进你的 agent（Claude Code / Codex 等），或直接让 agent 读 SKILL.md 按步骤执行。定时运行有两种方式：
 
 - 本机/常驻 agent：用 agent 自己的调度（如 Muse 的 cron），早晚各一次——当前 Dai 的实际运行方式。
 - GitHub Actions：`.github/workflows/radar.yml` 已备好骨架，设仓库变量 `RADAR_ENABLED=true` 后生效（需要先补上抓取层，见路线图）。

@@ -1,4 +1,4 @@
-"""tripple-signals: static site generator (P1).
+"""triple-sigma: static site generator (P1).
 
 Reads structured editions from ``editions/YYYY-MM-DD-{pilot,morning,evening}.json``
 (the single source of truth; the chat report is rendered from the same file)
@@ -15,7 +15,7 @@ Stdlib only. Base URL defaults to the GitHub Pages address from ROADMAP.md
 and can be overridden with --base-url (changing domain later = one flag).
 
 Usage:
-    python -m radar.publish [--base-url https://example.com/tripple-signals]
+    python -m radar.publish [--base-url https://example.com/triple-sigma]
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ OUT_DIR = ROOT / "site"
 ASSETS_DIR = ROOT / "assets"
 # Brand files copied verbatim into the generated site root.
 BRAND_FILES = ("favicon.svg", "favicon-32.png", "apple-touch-icon.png", "banner.png")
-DEFAULT_BASE_URL = "https://daiyanze.com/tripple-signals"
+DEFAULT_BASE_URL = "https://daiyanze.github.io/triple-sigma"
 
 SLOT_ORDER = {"pilot": 0, "morning": 1, "evening": 2}
 LEVEL_LABEL = {"must": "🔥 必看", "watch": "👀 关注", "seed": "🌱 苗头"}
@@ -129,19 +129,19 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title} — tripple-signals</title>
+<title>{title} — triple-sigma</title>
 <link rel="icon" type="image/svg+xml" href="{asset_prefix}favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="{asset_prefix}favicon-32.png">
 <link rel="apple-touch-icon" href="{asset_prefix}apple-touch-icon.png">
-<meta property="og:title" content="tripple-signals">
+<meta property="og:title" content="triple-sigma">
 <meta property="og:description" content="全网热点信号 · 多源共振才算热点">
 <meta property="og:image" content="{base_url}/banner.png">
 <link rel="stylesheet" href="{css_path}">
-<link rel="alternate" type="application/rss+xml" title="tripple-signals" href="{base_url}/feed.xml">
-<link rel="alternate" type="application/atom+xml" title="tripple-signals" href="{base_url}/atom.xml">
+<link rel="alternate" type="application/rss+xml" title="triple-sigma" href="{base_url}/feed.xml">
+<link rel="alternate" type="application/atom+xml" title="triple-sigma" href="{base_url}/atom.xml">
 </head>
 <body>
-<header><h1><img src="{asset_prefix}favicon.svg" alt="" style="height:1.2em;vertical-align:-0.24em;margin-right:.3em"><a href="{base_url}/" style="color:inherit;text-decoration:none">tripple-signals</a></h1>
+<header><h1><img src="{asset_prefix}favicon.svg" alt="" style="height:1.2em;vertical-align:-0.24em;margin-right:.3em"><a href="{base_url}/" style="color:inherit;text-decoration:none">triple-sigma</a></h1>
 <p class="meta">全网热点信号 · 可用 RSS / Atom 订阅</p></header>
 <nav><a href="{base_url}/">最新一期</a> · <a href="{base_url}/archive.html">归档</a> · <a href="{base_url}/feed.xml">RSS</a> · <a href="{base_url}/atom.xml">Atom</a></nav>
 <main>
@@ -149,7 +149,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <p class="meta">{published}</p>
 {body}
 </main>
-<footer>tripple-signals · 每期报告由 agent 扫描 + 判断生成；数字均带出处，未核实处如实标注。</footer>
+<footer>triple-sigma · 每期报告由 agent 扫描 + 判断生成；数字均带出处，未核实处如实标注。</footer>
 </body>
 </html>
 """
@@ -189,7 +189,7 @@ def build_rss(editions: list[dict], base_url: str) -> str:
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
         "<rss version=\"2.0\" xmlns:content=\"http://purl.org/rss/1.0/modules/content/\">\n"
         "<channel>\n"
-        "<title>tripple-signals</title>\n"
+        "<title>triple-sigma</title>\n"
         f"<link>{esc(base_url.rstrip('/'))}/</link>\n"
         "<description>全网热点信号</description>\n"
         "<language>zh-CN</language>\n" + "\n".join(items) + "\n</channel>\n</rss>\n"
@@ -215,7 +215,7 @@ def build_atom(editions: list[dict], base_url: str) -> str:
     return (
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
         "<feed xmlns=\"http://www.w3.org/2005/Atom\">\n"
-        "<title>tripple-signals</title>\n"
+        "<title>triple-sigma</title>\n"
         f"<link href=\"{esc(base_url.rstrip('/'))}/\"/>\n"
         f"<link rel=\"self\" href=\"{esc(base_url.rstrip('/'))}/atom.xml\"/>\n"
         f"<id>{esc(base_url.rstrip('/'))}/</id>\n"
@@ -277,8 +277,8 @@ def build(base_url: str, out_dir: Path = OUT_DIR,
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Generate the tripple-signals static site.")
-    parser.add_argument("--base-url", default=os.environ.get("TRIPPLE_SIGNALS_BASE_URL", DEFAULT_BASE_URL))
+    parser = argparse.ArgumentParser(description="Generate the triple-sigma static site.")
+    parser.add_argument("--base-url", default=os.environ.get("TRIPLE_SIGMA_BASE_URL", DEFAULT_BASE_URL))
     parser.add_argument("--out", default=str(OUT_DIR))
     args = parser.parse_args(argv)
     written = build(args.base_url, Path(args.out))

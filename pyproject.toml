@@ -3,8 +3,8 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tripple-signals"
-version = "0.5.0"
+name = "triple-sigma"
+version = "0.5.1"
 description = "Web hot-topic radar: layered free sources, deterministic fetch/filter in code, grading by an agent."
 readme = "README.md"
 requires-python = ">=3.10"

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.1 — 2026-11-13
+
+- 项目改名 **tripple-signals → triple-sigma**（仓库由 Dai 在 GitHub Settings 改名，旧地址自动重定向；token 按仓库 ID 授权，不受影响）：仓库内全部标识同步更换——README/ROADMAP、plugin 与技能目录 `skills/triple-sigma`、MCP server 名、抓取器 User-Agent、pyproject 包名、横幅 SVG/PNG 的字标、站点标题与 feed 标题。历史条目与期次内容不改。
+- 站点 canonical 地址改回 `https://daiyanze.github.io/triple-sigma`：daiyanze.com 的 DNS 在 Cloudflare（个人站），GitHub 账号侧残留的同名自定义域名配置会把 github.io 的访问重定向过去并 404；该残留配置的清理（或改用子域名）待 Dai 决定，见仓库设置说明。
+
 ## 0.5.0 — 2026-11-13
 
 继续借鉴 new-term-radar 还没借的三件（其付费部分——AIsa 链接图谱、DataForSEO 关键词量——不借）：

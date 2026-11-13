@@ -2,7 +2,7 @@
 <rect width="1280" height="640" fill="#FDFBF7"/>
 <line x1="90" y1="58" x2="1190" y2="58" stroke="#1A1A1A" stroke-width="3.5"/>
 <line x1="90" y1="70" x2="1190" y2="70" stroke="#1A1A1A" stroke-width="1.2"/>
-<text x="640" y="238" font-family="'Noto Serif CJK SC','Noto Serif',Georgia,serif" font-weight="700" font-size="104" fill="#1A1A1A" text-anchor="middle">tripple-signals</text>
+<text x="640" y="238" font-family="'Noto Serif CJK SC','Noto Serif',Georgia,serif" font-weight="700" font-size="104" fill="#1A1A1A" text-anchor="middle">triple-sigma</text>
 <text x="640" y="298" font-family="'Noto Sans CJK SC','Noto Sans',sans-serif" font-size="29" fill="#555555" text-anchor="middle">多源共振才算热点</text>
 <line x1="90" y1="336" x2="1190" y2="336" stroke="#1A1A1A" stroke-width="1.2"/>
 <line x1="90" y1="348" x2="1190" y2="348" stroke="#1A1A1A" stroke-width="3.5"/>

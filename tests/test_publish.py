@@ -51,7 +51,7 @@ def test_build_writes_all_outputs():
     tmpdir = tempfile.mkdtemp()
     editions_dir = _write_edition(tmpdir, SAMPLE)
     out_dir = Path(tmpdir) / "site"
-    written = publish.build("https://example.com/tripple-signals", out_dir, editions_dir)
+    written = publish.build("https://example.com/triple-sigma", out_dir, editions_dir)
     names = {p.relative_to(out_dir).as_posix() for p in written}
     assert names == {
         "style.css", "index.html", "archive.html", "feed.xml", "atom.xml",
@@ -65,12 +65,12 @@ def test_feeds_parse_and_carry_full_text():
     tmpdir = tempfile.mkdtemp()
     editions_dir = _write_edition(tmpdir, SAMPLE)
     out_dir = Path(tmpdir) / "site"
-    publish.build("https://example.com/tripple-signals", out_dir, editions_dir)
+    publish.build("https://example.com/triple-sigma", out_dir, editions_dir)
     ET.parse(out_dir / "feed.xml")
     ET.parse(out_dir / "atom.xml")
     feed = (out_dir / "feed.xml").read_text(encoding="utf-8")
     assert "示例模型发布" in feed
-    assert "https://example.com/tripple-signals/editions/2026-11-12-morning.html" in feed
+    assert "https://example.com/triple-sigma/editions/2026-11-12-morning.html" in feed
     assert "&lt;brackets&gt;" in feed  # body is escaped inside CDATA, not raw HTML
 
 
@@ -80,7 +80,7 @@ def test_edition_page_has_permanent_link_and_caveat():
     edition["items"] = [dict(SAMPLE["items"][0], unverified="名字待核实。")]
     editions_dir = _write_edition(tmpdir, edition)
     out_dir = Path(tmpdir) / "site"
-    publish.build("https://example.com/tripple-signals", out_dir, editions_dir)
+    publish.build("https://example.com/triple-sigma", out_dir, editions_dir)
     page = (out_dir / "editions" / "2026-11-12-morning.html").read_text(encoding="utf-8")
     assert "未核实" in page and "名字待核实" in page
     assert "archive.html" in page

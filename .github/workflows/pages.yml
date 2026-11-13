@@ -1,4 +1,4 @@
-# Deploy the tripple-signals static site to GitHub Pages.
+# Deploy the triple-sigma static site to GitHub Pages.
 # Runs when an edition file or the generator changes on main.
 # Requires Pages enabled in repo Settings (Source: GitHub Actions).
 name: pages

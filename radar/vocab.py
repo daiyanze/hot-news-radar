@@ -2,7 +2,7 @@
 
 Borrowed from new-term-radar's core X technique — a name only counts
 as a signal when the accounts you watch say it for the first time in
-weeks. tripple-signals has no X firehose, so the vocabulary is kept
+weeks. triple-sigma has no X firehose, so the vocabulary is kept
 over the *entity* sources, where a candidate's name is a real thing
 (a repo, a model, a tool, an app) rather than a headline: the first
 scan in which such a name appears in the candidate stream, it is

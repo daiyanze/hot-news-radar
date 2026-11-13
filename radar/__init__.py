@@ -1,3 +1,3 @@
-"""tripple-signals: web hot-topic radar."""
+"""triple-sigma: web hot-topic radar."""
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"

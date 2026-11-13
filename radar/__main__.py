@@ -44,12 +44,12 @@ def _run_scan(args) -> int:
     for line in scan_mod.summary_lines(report):
         print(line)
     print(f"候选文件：{report['_file']}")
-    print("下一步：把候选文件和 skills/tripple-signals/SKILL.md 交给你的 agent 出报告。")
+    print("下一步：把候选文件和 skills/triple-sigma/SKILL.md 交给你的 agent 出报告。")
     return 0
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="radar", description="tripple-signals radar")
+    parser = argparse.ArgumentParser(prog="radar", description="triple-sigma radar")
     parser.add_argument("--state", default=store_mod.DEFAULT_STATE_PATH,
                         help="Path to the topic store JSON")
     parser.add_argument("--config", default=None,
