@@ -1,3 +1,5 @@
+![tripple-signals · 每天两次，全网热点信号](assets/banner.png)
+
 # tripple-signals
 
 每天两扫的全网热点雷达：早 06:00 / 晚 18:00（JST），在热点到达大众搜索之前，从源头层抓到它。
