@@ -27,6 +27,8 @@
 - **OpenRouter**：最新上架模型（按创建时间排序，14 天内标新）——模型上架往往早于官宣热度
 - **Civitai**：最新社区模型（仅 SFW）；某基座突然被大量微调 = 扩散开始
 - **arXiv**：cs.AI / cs.CL / cs.LG 最新提交——新方法、新模型名的最早出处之一
+- **HF Daily Papers**：HF 社区票选论文——同一批研究的「已被同行筛过一遍」版本，与 arXiv 互补
+- **Bluesky**：关键账号（博主 + 媒体）的公开 RSS——搜索 API 要鉴权，账号 RSS 免 key，是 X 缺位时最近的替代
 - **Product Hunt**：当日新品（无 token 时走公开 Atom feed，无票数）
 
 ### L2 发酵层（确认热度在扩散）
@@ -37,6 +39,7 @@
 - **Mastodon**：大实例（mastodon.social）的 trending links/tags，当日独立账号数就是讨论量——X 没有免费 API 时的社交信号替代
 - **目录站 sitemap**：Futurepedia、Toolify、dang.ai 等 AI 工具目录的新工具页（借鉴 new-term-radar 的 sitemap 信号：目录站开始给某个新工具建页 = 进入扩散层）
 - **App Store 榜单**：美区畅销榜 + 免费榜——AI 应用冲榜是「有人付钱」的钱信号
+- **Wikipedia 热读榜**：英文维基昨日浏览 Top——大众层传感器，也是社会观察维度的主要供稿（只确认大众注意力，不产生科技信号）
 - **Google News**：科技/AI 头条（同一事件被多家媒体报道 = 已进入扩散层）
 
 > **组源规则（防假共振）**：RSS 组（官方博客、科技媒体）和 sitemap 组内部有再多家，整组只算 **1 个源**。一家公司的通稿被十家媒体转述、一个工具被五个目录站抄录，都不是多源共振——共振必须来自真正独立的源。
@@ -110,6 +113,6 @@
 ## 八、成本与边界
 
 - 全部用公开页面/搜索完成，不需要付费 API key（new-term-radar 的 AIsa 等付费源、AIHOT 的 SocialData（X）/ 大家啦（公众号）暂不引入；X 仍由 agent 网页扫补位，如果以后发现 X 信号不够，再议）。
-- 0.3.0 起抓取层共 19 个源：18 个免 key 实抓（见第二节），只有 X 需要 token。试过但没接的：Stack Exchange API（本机出口 IP 被限流 11 小时，信号再好也不稳定）、Bluesky 公开搜索（403）、Microsoft Research RSS（403）——都等条件变化再议，不硬凑。
+- 0.3.0 起抓取层共 19 个源，0.3.1 增至 22 个（新增 Daily Papers、Bluesky、Wikipedia 三个英文源；按 Dai 的选择，中文源 Bilibili/V2EX/少数派本轮不接）：21 个免 key 实抓（见第二节），只有 X 需要 token。试过但没接的：Stack Exchange API（本机出口 IP 被限流 11 小时，信号再好也不稳定）、Bluesky 公开搜索（403）、Microsoft Research RSS（403）——都等条件变化再议，不硬凑。
 - 只做公开信息的读取和汇总，不发帖、不互动。
 - 报告发回主聊天；台账和方法论都在 `~/workspace/hot-news-radar/` 下，可随时改。

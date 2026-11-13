@@ -4,10 +4,11 @@ feeds a small recorded-shaped fixture into a pure parse function."""
 from datetime import datetime, timezone
 
 from radar import scan as scan_mod
-from radar.fetchers import (appstore, arxiv, civitai, common, devto, github,
-                            googlenews, hackernews, hfspaces, huggingface,
-                            lobsters, mastodon, openrouter, producthunt, reddit,
-                            showhn, sitemaps)
+from radar.fetchers import (appstore, arxiv, bluesky, civitai, common,
+                            dailypapers, devto, github, googlenews, hackernews,
+                            hfspaces, huggingface, lobsters, mastodon,
+                            openrouter, producthunt, reddit, showhn, sitemaps,
+                            wikipedia)
 
 NOW = datetime(2026, 11, 12, tzinfo=timezone.utc)
 
@@ -210,6 +211,39 @@ def test_sitemaps_index_picks_highest_shard():
            '</sitemapindex>')
     shards = sitemaps.parse_index(xml, r"sitemap_tools_(\d+)\.xml$")
     assert shards[-1] == "https://www.toolify.ai/sitemap_tools_10.xml"
+
+
+def test_dailypapers_parse():
+    payload = [{"title": "T", "numComments": 4,
+                "paper": {"id": "2611.08219", "title": "Agent Scaling",
+                          "summary": "We scale.", "upvotes": 42,
+                          "authors": [{"name": "A"}, {"name": "B"}],
+                          "githubRepo": "acme/agent"}}]
+    items = dailypapers.parse(payload)
+    assert items[0]["url"] == "https://huggingface.co/papers/2611.08219"
+    assert items[0]["metrics"]["upvotes"] == 42
+
+
+def test_bluesky_parse_uses_description_as_name():
+    xml = ('<rss><channel><item>'
+           '<link>https://bsky.app/profile/x/post/1</link>'
+           '<description>Big news: a new model dropped</description>'
+           '<pubDate>13 Nov 2026 00:36 +0000</pubDate>'
+           '</item></channel></rss>')
+    items = bluesky.parse(xml, "x")
+    assert items[0]["name"] == "Big news: a new model dropped"
+    assert items[0]["metrics"]["account"] == "x"
+
+
+def test_wikipedia_parse_skips_meta_pages():
+    payload = {"items": [{"articles": [
+        {"article": "Main_Page", "views": 4000000, "rank": 1},
+        {"article": "Jensen_Huang", "views": 1000000, "rank": 2},
+        {"article": "Special:Search", "views": 900000, "rank": 3},
+        {"article": "Some_Event", "views": 500000, "rank": 4}]}]}
+    items = wikipedia.parse(payload)
+    assert [i["name"] for i in items] == ["Jensen Huang", "Some Event"]
+    assert items[0]["metrics"]["views"] == 1000000
 
 
 def test_resonance_needs_two_sources():

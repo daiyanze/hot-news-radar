@@ -32,9 +32,9 @@ python -m pytest -q tests            # 逻辑测试，不碰网络
 
 `python -m radar scan --edition morning` 跑全部抓取器，候选写入 `state/candidates-<日期>-<期次>.json`。
 
-### 信息源清单（共 19 个，18 个完全免费）
+### 信息源清单（共 22 个，21 个完全免费）
 
-**18 个源完全免费：免付费、免注册、免 API key**，clone 下来就能跑。只有 X 一个例外（官方 API 收费）。
+**21 个源完全免费：免付费、免注册、免 API key**，clone 下来就能跑。只有 X 一个例外（官方 API 收费）。
 
 | 信息源 | 层 | 读什么 | 费用 |
 |---|---|---|---|
@@ -47,6 +47,8 @@ python -m pytest -q tests            # 逻辑测试，不碰网络
 | OpenRouter | L1 源头 | 最新上架模型（按创建时间排序） | 免费 |
 | Civitai | L1 源头 | 最新社区模型（仅 SFW） | 免费 |
 | arXiv | L1 源头 | cs.AI / cs.CL / cs.LG 最新提交论文 | 免费 |
+| HF Daily Papers | L1 源头 | HF 社区票选论文（arXiv 的已筛选版） | 免费 |
+| Bluesky | L1 源头 | 配置账号的公开 RSS（博主 + 媒体，免 key 读 Bluesky 的路） | 免费 |
 | Product Hunt | L1 源头 | 当日新品（公开 Atom feed；有 token 时走 GraphQL 取票数） | 免费 |
 | X | L1 源头 | 关键账号的新动态 | ⚠️ 需自备 `X_BEARER_TOKEN`（官方 API 付费）；未配置时如实报缺失，由 agent 网页扫补位 |
 | Reddit | L2 发酵 | 配置版块的热帖（JSON，失败自动降级 RSS） | 免费 |
@@ -56,12 +58,13 @@ python -m pytest -q tests            # 逻辑测试，不碰网络
 | Mastodon | L2 发酵 | 大实例（mastodon.social）的 trending links/tags，附当日独立账号数 | 免费 |
 | 目录站 sitemap 组（Futurepedia、Toolify、dang.ai） | L2 发酵 | AI 工具目录的新工具页（借鉴 [new-term-radar](https://github.com/zhuyansen/new-term-radar) 的 sitemap 信号） | 免费 |
 | App Store | L2 发酵 | 美区畅销榜 + 免费榜（接口不稳时自动降级旧版 iTunes feed） | 免费 |
+| Wikipedia 热读榜 | L2 发酵 | 英文维基昨日浏览 Top（大众注意力 + 社会观察） | 免费 |
 | Google News | L2 发酵 | 科技/AI 头条（RSS） | 免费 |
 
 另有 L3 验证层 Google Trends（免费）：只核对已入选话题的曲线，从不作为发现来源，不占抓取器名额。
 
 - **组源只算一个源**：官方博客组、科技媒体组、sitemap 组内部再多家，跨源共振时整组计 1——通稿被十家转述、工具被五个目录抄录，都不算多源共振。
-- 2026-11-13 实测：19 个源 18 个实时出数（约 600 条候选），仅 X 缺失（无 token）。
+- 2026-11-13 实测：22 个源 21 个实时出数，仅 X 缺失（无 token）。
 - MCP server 已可用（`python -m radar.mcp_server`，仅标准库）：工具 `radar_scan`、`radar_review`。
 
 ## 路线图
